@@ -254,7 +254,7 @@ function App() {
 
   return (
     <>
-      <div ref={appRef} id="me" className="w-full min-h-screen bg-white overflow-x-hidden relative">
+      <div ref={appRef} id="me" className="w-full min-h-screen bg-white overflow-x-hidden relative max-w-[100vw]">
         <div ref={dotFieldRef} className="absolute inset-0 z-0">
           <DotField
             dotRadius={1.5}
@@ -328,17 +328,48 @@ function App() {
 
               <div ref={ctaRef} className="mt-10 flex flex-wrap gap-4">
                 <div data-cta-btn>
-                  <SpotlightCard className="!p-0 !bg-[#5227FF] !border-none !rounded-full flex !shadow-sm" spotlightColor="rgba(255, 255, 255, 0.4)">
-                    <Button size="lg" className="text-base px-8 h-12 bg-transparent hover:bg-white/10 text-white rounded-full z-10 border border-transparent">
-                      View Projects
-                    </Button>
+                  <SpotlightCard
+                    className="!p-0 !bg-[#5227FF] !border-none !rounded-full flex !shadow-sm"
+                    spotlightColor="rgba(255, 255, 255, 0.4)"
+                  >
+                    <a
+                      href="/resume.pdf"
+                      download="resume.pdf"
+                      className="pointer-events-auto"
+                    >
+                      <Button
+                        size="lg"
+                        className="text-base px-8 h-12 bg-transparent hover:bg-white/10 text-white rounded-full z-10 border border-transparent"
+                      >
+                        Get Resume
+                      </Button>
+                    </a>
                   </SpotlightCard>
                 </div>
+
                 <div data-cta-btn>
-                  <BorderGlow borderRadius={9999} backgroundColor="#ffffff" animated={false} className="!border-none !shadow-sm flex" edgeSensitivity={60} glowColor="180 151 207">
-                    <Button size="lg" variant="outline" className="text-base px-8 h-12 rounded-full border-purple-200 hover:bg-purple-50 bg-transparent">
-                      Contact Me
-                    </Button>
+                  <BorderGlow
+                    borderRadius={9999}
+                    backgroundColor="#ffffff"
+                    animated={false}
+                    className="!border-none !shadow-sm flex"
+                    edgeSensitivity={60}
+                    glowColor="180 151 207"
+                  >
+                    <a
+                      href="https://www.linkedin.com/in/rakeshadak08/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="pointer-events-auto"
+                    >
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="text-base px-8 h-12 rounded-full border-purple-200 hover:bg-purple-50 bg-transparent"
+                      >
+                        Contact Me
+                      </Button>
+                    </a>
                   </BorderGlow>
                 </div>
               </div>
@@ -427,8 +458,25 @@ function App() {
           />
         </div>
       </section>
+
+      <footer className="relative z-30 bg-black text-white border-t border-white/15">
+        <div className="h-screen w-full border-t border-white/10 flex items-center justify-center px-6 md:px-10">
+          <ScrollFloat
+            animationDuration={1}
+            ease="back.inOut(2)"
+            scrollStart="top bottom-=10%"
+            scrollEnd="bottom center"
+            stagger={0.03}
+            containerClassName="m-0"
+            textClassName="text-white uppercase font-extrabold tracking-tight text-[clamp(3rem,14vw,12rem)] leading-none"
+          >
+            The End
+          </ScrollFloat>
+        </div>
+      </footer>
     </>
   );
 }
 
 export default App;
+

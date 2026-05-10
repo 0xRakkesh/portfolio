@@ -43,8 +43,12 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground antialiased font-sans;
+    overflow-x: hidden;
+    max-width: 100vw;
+
   }
 
   h1,
