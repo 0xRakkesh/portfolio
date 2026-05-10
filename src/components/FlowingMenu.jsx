@@ -1,0 +1,181 @@
+import { useRef, useEffect, useState } from 'react';
+import { gsap } from 'gsap';
+
+function FlowingMenu({
+  items = [],
+  speed = 15,
+  textColor = '#fff',
+  bgColor = '#120F17',
+  marqueeBgColor = '#fff',
+  marqueeTextColor = '#120F17',
+  borderColor = '#fff',
+  itemHeightClassName = 'h-[16vh] md:h-[18vh] lg:h-[20vh]'
+}) {
+  return (
+    <div
+      className="w-full h-full overflow-hidden"
+      style={{ backgroundColor: bgColor }}>
+      <nav className="flex flex-col h-full m-0 p-0">
+        {items.map((item, idx) => (
+          <MenuItem
+            key={idx}
+            {...item}
+            speed={speed}
+            textColor={textColor}
+            marqueeBgColor={marqueeBgColor}
+            marqueeTextColor={marqueeTextColor}
+            borderColor={borderColor}
+            itemHeightClassName={itemHeightClassName}
+            isFirst={idx === 0} />
+        ))}
+      </nav>
+    </div>
+  );
+}
+
+function MenuItem({
+  text,
+  marqueeText,
+  speed,
+  textColor,
+  marqueeBgColor,
+  marqueeTextColor,
+  borderColor,
+  itemHeightClassName,
+  isFirst
+}) {
+  const itemRef = useRef(null);
+  const marqueeRef = useRef(null);
+  const marqueeInnerRef = useRef(null);
+  const animationRef = useRef(null);
+  const [repetitions, setRepetitions] = useState(6);
+
+  const animationDefaults = { duration: 1.05, ease: 'expo' };
+
+  const findClosestEdge = (mouseX, mouseY, width, height) => {
+    const topEdgeDist = (mouseX - width / 2) ** 2 + mouseY ** 2;
+    const bottomEdgeDist = (mouseX - width / 2) ** 2 + (mouseY - height) ** 2;
+    return topEdgeDist < bottomEdgeDist ? 'top' : 'bottom';
+  };
+
+  useEffect(() => {
+    const calculateRepetitions = () => {
+      if (!marqueeInnerRef.current) return;
+      const marqueeContent = marqueeInnerRef.current.querySelector('.marquee-part');
+      if (!marqueeContent) return;
+      const contentWidth = marqueeContent.offsetWidth;
+      const viewportWidth = window.innerWidth;
+      const needed = Math.ceil(viewportWidth / contentWidth) + 4;
+      setRepetitions(Math.max(6, needed));
+    };
+
+    calculateRepetitions();
+    window.addEventListener('resize', calculateRepetitions);
+    return () => window.removeEventListener('resize', calculateRepetitions);
+  }, [text, marqueeText]);
+
+  useEffect(() => {
+    const setupMarquee = () => {
+      if (!marqueeInnerRef.current) return;
+      const marqueeContent = marqueeInnerRef.current.querySelector('.marquee-part');
+      if (!marqueeContent) return;
+      const contentWidth = marqueeContent.offsetWidth;
+      if (contentWidth === 0) return;
+
+      if (animationRef.current) {
+        animationRef.current.kill();
+      }
+
+      gsap.set(marqueeInnerRef.current, { x: 0, force3D: true });
+      animationRef.current = gsap.fromTo(marqueeInnerRef.current, {
+        x: 0
+      }, {
+        x: -Math.ceil(contentWidth),
+        duration: speed,
+        ease: 'none',
+        repeat: -1
+      });
+    };
+
+    const timer = setTimeout(setupMarquee, 50);
+    return () => {
+      clearTimeout(timer);
+      if (animationRef.current) {
+        animationRef.current.kill();
+      }
+    };
+  }, [text, marqueeText, repetitions, speed]);
+
+  const handleMouseEnter = ev => {
+    if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
+    const rect = itemRef.current.getBoundingClientRect();
+    const edge = findClosestEdge(ev.clientX - rect.left, ev.clientY - rect.top, rect.width, rect.height);
+    if (itemLabelRef.current) {
+      gsap.to(itemLabelRef.current, { color: '#FFFFFF', duration: 0.28, ease: 'power2.out' });
+    }
+
+    gsap
+      .timeline({ defaults: animationDefaults })
+      .set(marqueeRef.current, { y: edge === 'top' ? '-101%' : '101%' }, 0)
+      .set(marqueeInnerRef.current, { y: edge === 'top' ? '101%' : '-101%' }, 0)
+      .to([marqueeRef.current, marqueeInnerRef.current], { y: '0%' }, 0);
+  };
+
+  const handleMouseLeave = ev => {
+    if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
+    const rect = itemRef.current.getBoundingClientRect();
+    const edge = findClosestEdge(ev.clientX - rect.left, ev.clientY - rect.top, rect.width, rect.height);
+    if (itemLabelRef.current) {
+      gsap.to(itemLabelRef.current, { color: textColor, duration: 0.32, ease: 'power2.out' });
+    }
+
+    gsap
+      .timeline({ defaults: animationDefaults })
+      .to(marqueeRef.current, { y: edge === 'top' ? '-101%' : '101%' }, 0)
+      .to(marqueeInnerRef.current, { y: edge === 'top' ? '101%' : '-101%' }, 0);
+  };
+
+  const hoverText = marqueeText || text;
+  const itemLabelRef = useRef(null);
+  const marqueeTokens = hoverText
+    .split('|')
+    .map(token => token.trim())
+    .filter(Boolean);
+
+  return (
+    <div
+      className={`flex-none relative overflow-hidden text-center ${itemHeightClassName}`}
+      ref={itemRef}
+      style={{ borderTop: isFirst ? 'none' : `1px solid ${borderColor}` }}>
+      <div
+        ref={itemLabelRef}
+        className="flex items-center justify-center h-full relative cursor-default select-none uppercase font-bold text-[5.6vh] tracking-tight"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        style={{ color: textColor }}>
+        {text}
+      </div>
+      <div
+        className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none translate-y-[101%]"
+        ref={marqueeRef}
+        style={{ backgroundColor: marqueeBgColor }}>
+        <div className="h-full w-fit flex" ref={marqueeInnerRef}>
+          {[...Array(repetitions)].map((_, idx) => (
+            <div
+              className="marquee-part flex items-center flex-shrink-0 gap-[3.2vw] px-[3.2vw]"
+              key={idx}
+              style={{ color: marqueeTextColor }}>
+              {marqueeTokens.map((token, tokenIdx) => (
+                <span key={`${token}-${tokenIdx}`} className="whitespace-nowrap uppercase font-semibold text-[5.4vh] leading-[1.05]">
+                  {token}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default FlowingMenu;
