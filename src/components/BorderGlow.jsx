@@ -54,15 +54,17 @@ const BorderGlow = ({
   children,
   className = '',
   edgeSensitivity = 30,
-  glowColor = '40 80 80',
-  backgroundColor = '#120F17',
+  glowColor = '265 85 70',
+  backgroundColor = '#ffffff',
   borderRadius = 28,
   glowRadius = 40,
   glowIntensity = 1.0,
   coneSpread = 25,
   animated = false,
-  colors = ['#c084fc', '#f472b6', '#38bdf8'],
+  colors = ['#22d3ee', '#a855f7', '#f472b6'],
   fillOpacity = 0.5,
+  borderWidth = 1,
+  borderColor = 'rgba(0, 0, 0, 0.1)',
 }) => {
   const cardRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -149,10 +151,11 @@ const BorderGlow = ({
       onPointerMove={handlePointerMove}
       onPointerEnter={() => setIsHovered(true)}
       onPointerLeave={() => setIsHovered(false)}
-      className={`relative grid isolate border border-white/15 ${className}`}
+      className={`relative grid isolate ${className}`}
       style={{
         background: backgroundColor,
         borderRadius: `${borderRadius}px`,
+        border: `${borderWidth}px solid ${borderColor}`,
         transform: 'translate3d(0, 0, 0.01px)',
         boxShadow: 'rgba(0,0,0,0.1) 0 1px 2px, rgba(0,0,0,0.1) 0 2px 4px, rgba(0,0,0,0.1) 0 4px 8px, rgba(0,0,0,0.1) 0 8px 16px, rgba(0,0,0,0.1) 0 16px 32px, rgba(0,0,0,0.1) 0 32px 64px',
       }}>

@@ -151,7 +151,7 @@ const StickyCard = ({ i, item, progress, range, targetScale }) => {
                   size={170}
                   weight="thin"
                   className="
-          text-[#B7AFFF]
+          text-[white]
           drop-shadow-[0_0_25px_rgba(183,175,255,0.25)]
         "
                 />
