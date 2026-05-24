@@ -390,7 +390,6 @@ function App() {
           />
         </div>
 
-
         <div className="relative z-10 min-h-[100svh] text-black pointer-events-none">
           <div className="mx-auto grid min-h-[100svh] w-full max-w-[1600px] grid-cols-1 lg:grid-cols-2">
           <div
@@ -480,8 +479,8 @@ function App() {
               </div>
             </div>
           </div>
-            <div className="pointer-events-auto relative hidden min-h-[100svh] items-center justify-center pl-4 pt-10 lg:flex">
-              <div className="relative w-full max-w-[320px] -translate-y-3 overflow-hidden rounded-[32px] border-[5px] border-white p-[6px] shadow-[0_0_0_2px_rgba(0,0,0,0.2),0_20px_45px_rgba(0,0,0,0.18)]">
+            <div className="pointer-events-auto relative hidden min-h-[100svh] items-center justify-center px-8 pt-10 lg:flex">
+              <div className="relative w-full max-w-[320px] overflow-hidden rounded-[32px] border-[5px] border-white p-[6px] shadow-[0_0_0_2px_rgba(0,0,0,0.2),0_20px_45px_rgba(0,0,0,0.18)]">
                 <img
                   src="/profile.png"
                   alt="Rakesh profile"
