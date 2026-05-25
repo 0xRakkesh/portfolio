@@ -169,9 +169,7 @@ const MilestonesFlowItems = [
     text: 'EIBS 2.0 Finalist',
     marqueeText: '|EIBS 2.0|✦|FINALIST|✦|',
     images: [
-      'https://picsum.photos/id/1011/900/600',
-      'https://picsum.photos/id/1005/900/600',
-      'https://picsum.photos/id/1039/900/600'
+      '/photos/eibs.jpeg'
     ]
   },
   {
@@ -179,19 +177,15 @@ const MilestonesFlowItems = [
     text: '2nd Runner Up Vibeathon',
     marqueeText: '|VIBEATHON|✦|2ND RUNNER UP|✦|',
     images: [
-      'https://picsum.photos/id/1025/900/600',
-      'https://picsum.photos/id/1040/900/600',
-      'https://picsum.photos/id/1067/900/600'
+      '/photos/Vibe-A-thon.png'
     ]
   },
   {
     link: '#',
-    text: 'HackHeriatge 3rd Rank',
-    marqueeText: '|HACKHERIATGE|✦|3RD RANK|✦|',
+    text: 'EDUCHAIN S3 GLOBAL Finalist',
+    marqueeText: '|EDUCHAIN S3 GLOBAL|✦|FINALIST|✦|',
     images: [
-      'https://picsum.photos/id/1074/900/600',
-      'https://picsum.photos/id/1084/900/600',
-      'https://picsum.photos/id/1080/900/600'
+      '/photos/educhain.jpeg'
     ]
   }
 ];
