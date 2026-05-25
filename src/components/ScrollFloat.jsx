@@ -9,11 +9,12 @@ const ScrollFloat = ({
   scrollContainerRef,
   containerClassName = '',
   textClassName = '',
-  animationDuration = 1,
+  animationDuration = 0.8,
   ease = 'back.inOut(2)',
-  scrollStart = 'center bottom+=50%',
+  scrollStart = 'top bottom',
   scrollEnd = 'bottom bottom-=40%',
-  stagger = 0.03
+  stagger = 0.02,
+  scrub = false
 }) => {
   const containerRef = useRef(null);
 
@@ -55,8 +56,7 @@ const ScrollFloat = ({
           trigger: el,
           scroller,
           start: scrollStart,
-          end: scrollEnd,
-          scrub: true
+          ...(scrub ? { end: scrollEnd, scrub: true } : { toggleActions: 'play none none reverse' })
         }
       }
     );
@@ -65,7 +65,7 @@ const ScrollFloat = ({
       if (tween.scrollTrigger) tween.scrollTrigger.kill();
       tween.kill();
     };
-  }, [scrollContainerRef, animationDuration, ease, scrollStart, scrollEnd, stagger]);
+  }, [scrollContainerRef, animationDuration, ease, scrollStart, scrollEnd, stagger, scrub]);
 
   return (
     <h2 ref={containerRef} className={`my-5 overflow-hidden ${containerClassName}`}>
@@ -75,4 +75,3 @@ const ScrollFloat = ({
 };
 
 export default ScrollFloat;
-

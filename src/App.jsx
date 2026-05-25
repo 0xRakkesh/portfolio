@@ -91,7 +91,8 @@ const newSkillsData = [
     items: [
       { name: "Node.js", icon: Hexagon, color: "#43853d" },
       { name: "Express.js", icon: CodeBlock, color: "#ffffff" },
-      { name: "REST", icon: Cloud, color: "#007ACC" }
+      { name: "REST", icon: Cloud, color: "#007ACC" },
+      { name: "WebSocket", icon: GlobeHemisphereWest, color: "#22d3ee" }
     ]
   },
   {
@@ -99,7 +100,8 @@ const newSkillsData = [
     items: [
       { name: "MongoDB", icon: Folder, color: "#47A248" },
       { name: "Redis", icon: HardDrives, color: "#DC382D" },
-      { name: "PostgreSQL", icon: Database, color: "#336791" }
+      { name: "PostgreSQL", icon: Database, color: "#336791" },
+      { name: "Mongoose", icon: CodeBlock, color: "#b91c1c" }
     ]
   },
   {
@@ -107,7 +109,8 @@ const newSkillsData = [
     items: [
       { name: "JWT", icon: Key, color: "#d63aff" },
       { name: "Bcrypt", icon: ShieldCheck, color: "#a855f7" },
-      { name: "OAuth", icon: LockKey, color: "#ffffff" }
+      { name: "OAuth", icon: LockKey, color: "#ffffff" },
+      { name: "Rate Limiting", icon: Cloud, color: "#38bdf8" }
     ]
   },
   {
@@ -115,7 +118,9 @@ const newSkillsData = [
     items: [
       { name: "Git", icon: GitBranch, color: "#F05032" },
       { name: "GitHub", icon: GithubLogo, color: "#ffffff" },
-      { name: "GSAP", icon: Sparkle, color: "#88CE02" }
+      { name: "GSAP", icon: Sparkle, color: "#88CE02" },
+      { name: "Postman", icon: Code, color: "#ff6c37" },
+      { name: "Linux", icon: HardDrives, color: "#eab308" }
     ]
   }
 ];
@@ -129,7 +134,8 @@ const projectItems = [
     stack: ['Web3', 'Solidity', 'Android', 'IPFS'],
     link: 'https://github.com/BikramMondal5/Nano-Bond/tree/main/Android',
     color: '#120F17',
-    icon: Cube
+    icon: Cube,
+    media: { type: 'video', url: '/videos/nanobonds.mp4' }
   },
   {
     label: 'Web3 • IPFS',
@@ -139,7 +145,8 @@ const projectItems = [
     stack: ['Next.js', 'Hono API', 'IPFS/Pinata', 'Algorand'],
     link: 'https://github.com/Rakesh-ada/w3deploy',
     color: '#120F17',
-    icon: GlobeHemisphereWest
+    icon: GlobeHemisphereWest,
+    media: { type: 'image', url: '/photos/web3deploy.png' }
   },
   {
     label: 'Offline-first',
@@ -149,7 +156,8 @@ const projectItems = [
     stack: ['React Native (Expo)', 'SQLite', 'TypeScript', 'Google Gemini'],
     link: 'https://github.com/Rakesh-ada/InVo',
     color: '#120F17',
-    icon: Database
+    icon: Database,
+    media: { type: 'video', url: '/videos/invo.mp4' }
   },
   {
     label: 'Desktop',
@@ -159,7 +167,8 @@ const projectItems = [
     stack: ['Electron', 'Node.js', 'Google Gemini', 'n8n', 'ElevenLabs'],
     link: 'https://github.com/Rakesh-ada/Neo',
     color: '#120F17',
-    icon: Robot
+    icon: Robot,
+    media: { type: 'image', url: '/photos/Neo.png' }
   }
 ];
 
@@ -202,6 +211,7 @@ function App() {
   const ctaRef = useRef(null);
   const skillsSectionRef = useRef(null);
   const skillsMenuRef = useRef(null);
+  const skillsDividerRef = useRef(null);
   const projectsGridSectionRef = useRef(null);
   const [resumeViews, setResumeViews] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -308,6 +318,35 @@ function App() {
     { scope: appRef }
   );
 
+  useGSAP(() => {
+    if (!skillsDividerRef.current || !skillsSectionRef.current) return;
+
+    gsap.set(skillsDividerRef.current, {
+      rotate: 0,
+      transformOrigin: '50% 50%',
+      force3D: true
+    });
+
+    const tween = gsap.to(skillsDividerRef.current, {
+      rotate: 360,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: skillsSectionRef.current,
+        start: 'top 85%',
+        end: 'bottom top',
+        scrub: 1.8,
+        invalidateOnRefresh: true
+      }
+    });
+
+    ScrollTrigger.refresh();
+
+    return () => {
+      tween.scrollTrigger?.kill();
+      tween.kill();
+    };
+  }, { dependencies: [] });
+
   const handleAnimationComplete = () => {
     console.log('All letters have animated!');
   };
@@ -401,6 +440,7 @@ function App() {
     ? MilestonesFlowItems.map(item => {
         if (item.text.toLowerCase().includes('eibs')) return { ...item, text: 'EIBS 2.0' };
         if (item.text.toLowerCase().includes('vibeathon')) return { ...item, text: 'VIBEATHON' };
+        if (item.text.toLowerCase().includes('educhain')) return { ...item, text: 'EDUCHAIN S3' };
         if (item.text.toLowerCase().includes('hack')) return { ...item, text: 'HACKHERITAGE' };
         return item;
       })
@@ -547,19 +587,27 @@ function App() {
         </div>
       </div>
 
-      <section ref={skillsSectionRef} id="skills" className="relative z-30 min-h-[40svh] md:min-h-[100svh] bg-[#120F17] text-white">
-        <div ref={skillsMenuRef} className="min-h-[40svh] md:min-h-[100svh] w-full flex items-center justify-start px-6 md:px-10 py-16 md:py-0">
-          <ScrollFloat
-            animationDuration={1}
-            ease="back.inOut(2)"
-            scrollStart="top bottom"
-            scrollEnd="bottom 50%"
-            stagger={0.03}
-            containerClassName="m-0"
-            textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(4rem,16vw,14rem)] leading-none"
-          >
-            Skills
-          </ScrollFloat>
+      <section ref={skillsSectionRef} id="skills" className="relative z-30 min-h-[34svh] md:h-[56svh] bg-[#120F17] text-white flex items-center">
+        <div ref={skillsMenuRef} className="w-full flex items-center justify-start px-6 md:px-10">
+          <div className="flex w-full items-center justify-between">
+            <ScrollFloat
+              animationDuration={1}
+              ease="back.inOut(2)"
+              scrollStart="top bottom"
+              scrollEnd="bottom 50%"
+              stagger={0.03}
+              containerClassName="m-0"
+              textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(4rem,16vw,14rem)] leading-none"
+            >
+              Skills
+            </ScrollFloat>
+            <img
+              ref={skillsDividerRef}
+              src="/icons/Abstract Shape.png"
+              alt="decorative shape"
+              className="pointer-events-none w-[5.2rem] h-[5.2rem] md:w-[15rem] md:h-[15rem] lg:w-[17rem] lg:h-[17rem] object-contain shrink-0"
+            />
+          </div>
         </div>
       </section>
 
@@ -596,7 +644,7 @@ function App() {
             scrollEnd="bottom 50%"
             stagger={0.03}
             containerClassName="m-0"
-            textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(4rem,14vw,14rem)] leading-none"
+            textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(3rem,12vw,10rem)] md:text-[clamp(4rem,14vw,14rem)] leading-none"
           >
             Milestones
           </ScrollFloat>
@@ -627,7 +675,7 @@ function App() {
             scrollEnd="bottom 50%"
             stagger={0.03}
             containerClassName="m-0"
-            textClassName="text-left text-black uppercase font-extrabold tracking-tight text-[clamp(4rem,16vw,14rem)] leading-none"
+            textClassName="text-left text-black uppercase font-extrabold tracking-tight text-[clamp(3rem,12vw,10rem)] md:text-[clamp(4rem,16vw,14rem)] leading-none"
           >
             ReachOut
           </ScrollFloat>

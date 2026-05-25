@@ -40,8 +40,8 @@ export default function ProjectAccordion({ items }) {
                   animate={{ height: isActive ? 'auto' : 0, opacity: isActive ? 1 : 0 }}
                   className="w-full bg-white overflow-hidden"
                 >
-                  <div className="w-full flex flex-col py-10 px-4 md:px-8">
-                    <div className="w-full max-w-4xl flex flex-col justify-center">
+                  <div className="w-full flex flex-col md:flex-row py-10 px-4 md:px-8 gap-8 justify-between">
+                    <div className="w-full md:w-1/2 flex flex-col justify-center">
                       <div className="flex items-center gap-4 mb-6">
                         <div className="bg-[#120F17] text-white w-12 h-12 flex items-center justify-center rounded-sm shrink-0">
                           {item.icon ? React.createElement(item.icon, { size: 28, weight: "bold" }) : index + 1}
@@ -78,6 +78,26 @@ export default function ProjectAccordion({ items }) {
                         )}
                       </div>
                     </div>
+                    {item.media && (
+                      <div className="w-full md:w-1/2 flex items-center justify-center rounded-2xl overflow-hidden bg-gray-100 shadow-md">
+                        {item.media.type === 'video' ? (
+                          <video 
+                            src={item.media.url} 
+                            autoPlay 
+                            loop 
+                            muted 
+                            playsInline 
+                            className="w-full h-auto object-cover max-h-[400px]"
+                          />
+                        ) : (
+                          <img 
+                            src={item.media.url} 
+                            alt={item.title} 
+                            className="w-full h-auto object-cover max-h-[400px]"
+                          />
+                        )}
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               </div>
