@@ -36,6 +36,7 @@ function FlowingMenu({
 function MenuItem({
   text,
   marqueeText,
+  images = [],
   speed,
   textColor,
   marqueeBgColor,
@@ -109,7 +110,14 @@ function MenuItem({
   const handleMouseEnter = ev => {
     if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
     const rect = itemRef.current.getBoundingClientRect();
-    const edge = findClosestEdge(ev.clientX - rect.left, ev.clientY - rect.top, rect.width, rect.height);
+    const clientX = ev.clientX ?? (ev.touches && ev.touches[0].clientX) ?? 0;
+    const clientY = ev.clientY ?? (ev.touches && ev.touches[0].clientY) ?? 0;
+    
+    // Safely check for edge
+    const xPos = clientX - rect.left;
+    const yPos = clientY - rect.top;
+    const edge = findClosestEdge(xPos, yPos, rect.width, rect.height);
+    
     if (itemLabelRef.current) {
       gsap.to(itemLabelRef.current, { color: '#FFFFFF', duration: 0.28, ease: 'power2.out' });
     }
@@ -124,7 +132,14 @@ function MenuItem({
   const handleMouseLeave = ev => {
     if (!itemRef.current || !marqueeRef.current || !marqueeInnerRef.current) return;
     const rect = itemRef.current.getBoundingClientRect();
-    const edge = findClosestEdge(ev.clientX - rect.left, ev.clientY - rect.top, rect.width, rect.height);
+    const clientX = ev.clientX ?? (ev.changedTouches && ev.changedTouches[0]?.clientX) ?? 0;
+    const clientY = ev.clientY ?? (ev.changedTouches && ev.changedTouches[0]?.clientY) ?? 0;
+    
+    // Safely check for edge
+    const xPos = clientX - rect.left;
+    const yPos = clientY - rect.top;
+    const edge = findClosestEdge(xPos, yPos, rect.width, rect.height);
+    
     if (itemLabelRef.current) {
       gsap.to(itemLabelRef.current, { color: textColor, duration: 0.32, ease: 'power2.out' });
     }
@@ -141,19 +156,34 @@ function MenuItem({
     .split('|')
     .map(token => token.trim())
     .filter(Boolean);
+  const displayImage = images[0] || '/profile.png';
 
   return (
     <div
-      className={`flex-none relative overflow-hidden text-center ${itemHeightClassName}`}
+      className={`flex-none relative overflow-hidden cursor-default ${itemHeightClassName}`}
       ref={itemRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleMouseEnter}
+      onTouchEnd={handleMouseLeave}
       style={{ borderTop: isFirst ? 'none' : `1px solid ${borderColor}` }}>
       <div
         ref={itemLabelRef}
-        className="flex items-center justify-center h-full relative cursor-default select-none uppercase font-bold text-[5.6vh] tracking-tight"
+        className="flex items-center justify-between h-full relative cursor-default select-none uppercase font-bold text-[5.6vh] tracking-tight px-6 md:px-10 lg:px-14"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{ color: textColor }}>
-        {text}
+        <span className="text-left leading-none">{text}</span>
+        <div className="hidden md:flex items-center justify-end w-[28vw] max-w-[520px] min-w-[260px] h-[68%] overflow-hidden rounded-2xl border border-white/15 bg-black/10">
+          <div className="h-full w-full p-2">
+            <img
+              src={displayImage}
+              alt={`${text} milestone`}
+              className="h-full w-full rounded-xl object-cover"
+              loading="lazy"
+            />
+          </div>
+        </div>
       </div>
       <div
         className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none translate-y-[101%]"

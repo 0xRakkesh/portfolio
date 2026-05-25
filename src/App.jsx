@@ -11,7 +11,8 @@ import BorderGlow from './components/BorderGlow';
 import SpotlightCard from './components/SpotlightCard';
 import ScrollFloat from './components/ScrollFloat';
 import FlowingMenu from './components/FlowingMenu';
-import ScrollStack from './components/ScrollStack';
+import ProjectAccordion from './components/ProjectAccordion';
+import SkillSection from './components/SkillSection';
 import { Button } from './components/ui/button';
 import { SmoothCursor } from './components/ui/smooth-cursor';
 import { Input } from './components/ui/input';
@@ -23,7 +24,17 @@ import {
   Robot,
   GithubLogo,
   LinkedinLogo,
-  Code
+  Code,
+  LockKey,
+  GitBranch,
+  Sparkle,
+  Hexagon,
+  CodeBlock,
+  Cloud,
+  HardDrives,
+  Folder,
+  Key,
+  ShieldCheck
 } from "@phosphor-icons/react";
 
 if (typeof window !== 'undefined' && !window.__lenis) {
@@ -74,12 +85,47 @@ const skillsFlowItems = [
   }
 ];
 
+const newSkillsData = [
+  {
+    category: "BACKEND",
+    items: [
+      { name: "Node.js", icon: Hexagon, color: "#43853d" },
+      { name: "Express.js", icon: CodeBlock, color: "#ffffff" },
+      { name: "REST", icon: Cloud, color: "#007ACC" }
+    ]
+  },
+  {
+    category: "DATABASE",
+    items: [
+      { name: "MongoDB", icon: Folder, color: "#47A248" },
+      { name: "Redis", icon: HardDrives, color: "#DC382D" },
+      { name: "PostgreSQL", icon: Database, color: "#336791" }
+    ]
+  },
+  {
+    category: "SECURITY",
+    items: [
+      { name: "JWT", icon: Key, color: "#d63aff" },
+      { name: "Bcrypt", icon: ShieldCheck, color: "#a855f7" },
+      { name: "OAuth", icon: LockKey, color: "#ffffff" }
+    ]
+  },
+  {
+    category: "OTHERS",
+    items: [
+      { name: "Git", icon: GitBranch, color: "#F05032" },
+      { name: "GitHub", icon: GithubLogo, color: "#ffffff" },
+      { name: "GSAP", icon: Sparkle, color: "#88CE02" }
+    ]
+  }
+];
+
 const projectItems = [
   {
     label: 'Web3 • Android',
     title: 'nanobonds',
     description:
-      'DeFi platform enabling fractional investment in government bonds using stablecoins (USDT/USDC). Features real-time yield visualization, asset proofs on IPFS, and automated smart contract accounting.',
+      'DeFi platform for fractional investment in government bonds using stablecoins with real-time yield visualization.',
     stack: ['Web3', 'Solidity', 'Android', 'IPFS'],
     link: 'https://github.com/BikramMondal5/Nano-Bond/tree/main/Android',
     color: '#120F17',
@@ -89,7 +135,7 @@ const projectItems = [
     label: 'Web3 • IPFS',
     title: 'w3deploy',
     description:
-      'Helps developers ship frontend projects from GitHub or MCP-driven agent workflows to IPFS natively. Features reliable deploy pipelines, verifiable blockchain-linked history via Algorand, and Smolify-assisted stack classification.',
+      'Native IPFS deployment pipeline for frontend projects from GitHub and AI agent-driven workflows.',
     stack: ['Next.js', 'Hono API', 'IPFS/Pinata', 'Algorand'],
     link: 'https://github.com/Rakesh-ada/w3deploy',
     color: '#120F17',
@@ -99,7 +145,7 @@ const projectItems = [
     label: 'Offline-first',
     title: 'Invo',
     description:
-      'Modern offline-first inventory management built with React Native (Expo) and SQLite. Features POS QR payments, AI-assisted BI insights (Gemini), vector embeddings, and weekly PDF reports.',
+      'Offline-first inventory POS system built with React Native, SQLite, and Gemini-powered AI insights.',
     stack: ['React Native (Expo)', 'SQLite', 'TypeScript', 'Google Gemini'],
     link: 'https://github.com/Rakesh-ada/InVo',
     color: '#120F17',
@@ -109,7 +155,7 @@ const projectItems = [
     label: 'Desktop',
     title: 'Neo',
     description:
-      'Floating, always-on-top desktop chat app powered by a Dual AI Engine (Google Gemini & n8n automation). Supports custom workflows, voice capabilities, and smart switching.',
+      'Always-on-top desktop AI chat assistant powered by Gemini and n8n with custom automation pipelines.',
     stack: ['Electron', 'Node.js', 'Google Gemini', 'n8n', 'ElevenLabs'],
     link: 'https://github.com/Rakesh-ada/Neo',
     color: '#120F17',
@@ -121,17 +167,32 @@ const MilestonesFlowItems = [
   {
     link: '#',
     text: 'EIBS 2.0 Finalist',
-    marqueeText: '|EIBS 2.0|✦|FINALIST|✦|'
+    marqueeText: '|EIBS 2.0|✦|FINALIST|✦|',
+    images: [
+      'https://picsum.photos/id/1011/900/600',
+      'https://picsum.photos/id/1005/900/600',
+      'https://picsum.photos/id/1039/900/600'
+    ]
   },
   {
     link: '#',
     text: '2nd Runner Up Vibeathon',
-    marqueeText: '|VIBEATHON|✦|2ND RUNNER UP|✦|'
+    marqueeText: '|VIBEATHON|✦|2ND RUNNER UP|✦|',
+    images: [
+      'https://picsum.photos/id/1025/900/600',
+      'https://picsum.photos/id/1040/900/600',
+      'https://picsum.photos/id/1067/900/600'
+    ]
   },
   {
     link: '#',
     text: 'HackHeriatge 3rd Rank',
-    marqueeText: '|HACKHERIATGE|✦|3RD RANK|✦|'
+    marqueeText: '|HACKHERIATGE|✦|3RD RANK|✦|',
+    images: [
+      'https://picsum.photos/id/1074/900/600',
+      'https://picsum.photos/id/1084/900/600',
+      'https://picsum.photos/id/1080/900/600'
+    ]
   }
 ];
 
@@ -379,7 +440,7 @@ function App() {
             items={menuItems}
             socialItems={socialItems}
             displaySocials
-            displayItemNumbering={true}
+            displayItemNumbering={false}
             menuButtonColor="#000000"
             changeMenuColorOnOpen={false}
             colors={['#B497CF', '#5227FF']}
@@ -479,12 +540,12 @@ function App() {
               </div>
             </div>
           </div>
-            <div className="pointer-events-auto relative hidden min-h-[100svh] items-center justify-center px-8 pt-10 lg:flex">
-              <div className="relative w-full max-w-[320px] overflow-hidden rounded-[32px] border-[5px] border-white p-[6px] shadow-[0_0_0_2px_rgba(0,0,0,0.2),0_20px_45px_rgba(0,0,0,0.18)]">
+            <div className="pointer-events-auto relative hidden min-h-[100svh] items-center justify-center pl-20 pt-10 lg:flex">
+              <div className="relative w-full max-w-[420px] overflow-hidden rounded-[36px] border-[6px] border-white p-[8px] shadow-[0_0_0_2px_rgba(0,0,0,0.2),0_26px_56px_rgba(0,0,0,0.22)]">
                 <img
                   src="/profile.png"
                   alt="Rakesh profile"
-                  className="block h-[44vh] min-h-[260px] w-full rounded-[26px] object-cover object-center"
+                  className="block h-[56vh] min-h-[360px] w-full rounded-[30px] object-cover object-center"
                 />
               </div>
             </div>
@@ -492,66 +553,56 @@ function App() {
         </div>
       </div>
 
-      <section ref={skillsSectionRef} id="skills" className="relative z-30 min-h-[100svh] bg-[#120F17] text-white">
-        <div ref={skillsMenuRef} className="min-h-[100svh] w-full flex items-center justify-center px-6 md:px-10">
+      <section ref={skillsSectionRef} id="skills" className="relative z-30 min-h-[40svh] md:min-h-[100svh] bg-[#120F17] text-white">
+        <div ref={skillsMenuRef} className="min-h-[40svh] md:min-h-[100svh] w-full flex items-center justify-start px-6 md:px-10 py-16 md:py-0">
           <ScrollFloat
             animationDuration={1}
             ease="back.inOut(2)"
-            scrollStart="center bottom+=50%"
-            scrollEnd="bottom bottom-=40%"
+            scrollStart="top bottom"
+            scrollEnd="bottom 50%"
             stagger={0.03}
             containerClassName="m-0"
-            textClassName="text-white uppercase font-extrabold tracking-tight text-[clamp(4rem,16vw,14rem)] leading-none"
+            textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(4rem,16vw,14rem)] leading-none"
           >
             Skills
           </ScrollFloat>
         </div>
       </section>
 
-      <section className="relative z-30 min-h-[100svh] md:h-[120vh] bg-[#120F17] text-white">
-        <div className="h-full w-full">
-          <FlowingMenu
-            items={skillsFlowItems}
-            speed={14}
-            textColor="#ffffff"
-            bgColor="#120F17"
-            marqueeBgColor="#ffffff"
-            marqueeTextColor="#120F17"
-            borderColor="#ffffff"
-          />
-        </div>
+      <section className="relative z-30 min-h-[40svh] md:min-h-screen bg-[#120F17] text-white py-10 md:py-20">
+        <SkillSection skillsData={newSkillsData} />
       </section>
 
-      <section id="projects" className="relative z-30 min-h-[100svh] md:h-screen bg-white text-black">
-        <div className="h-full w-full flex items-center justify-center px-6 md:px-10">
+      <section id="projects" className="relative z-30 min-h-[40svh] md:min-h-[100svh] bg-white text-black">
+        <div className="min-h-[40svh] md:min-h-[100svh] w-full flex items-center justify-start px-6 md:px-10 py-16 md:py-0">
           <ScrollFloat
             animationDuration={1}
             ease="back.inOut(2)"
-            scrollStart="center bottom+=50%"
-            scrollEnd="bottom bottom-=40%"
+            scrollStart="top bottom"
+            scrollEnd="bottom 50%"
             stagger={0.03}
              containerClassName="m-0"
-             textClassName="text-black uppercase font-extrabold tracking-tight text-[clamp(4rem,16vw,14rem)] leading-none"
+             textClassName="text-left text-black uppercase font-extrabold tracking-tight text-[clamp(4rem,16vw,14rem)] leading-none"
           >
             Projects
           </ScrollFloat>
         </div>
       </section>
 
-      <section ref={projectsGridSectionRef} className="relative z-30 w-full bg-white text-black">
-        <ScrollStack items={projectItems} />
+      <section ref={projectsGridSectionRef} className="relative z-30 w-full bg-white text-black pointer-events-auto">
+        <ProjectAccordion items={projectItems} />
       </section>
 
-      <section id="Milestones" className="relative z-30 min-h-[100svh] md:h-screen bg-[#120F17] text-white">
-        <div className="h-full w-full flex items-center justify-center px-6 md:px-10">
+      <section id="Milestones" className="relative z-30 min-h-[40svh] md:min-h-[100svh] bg-[#120F17] text-white">
+        <div className="min-h-[40svh] md:min-h-[100svh] w-full flex items-center justify-start px-6 md:px-10 py-16 md:py-0">
           <ScrollFloat
             animationDuration={1}
             ease="back.inOut(2)"
-            scrollStart="center bottom+=50%"
-            scrollEnd="bottom bottom-=40%"
+            scrollStart="top bottom"
+            scrollEnd="bottom 50%"
             stagger={0.03}
             containerClassName="m-0"
-            textClassName="text-white uppercase font-extrabold tracking-tight whitespace-nowrap text-[clamp(2.75rem,11vw,10.5rem)] leading-none"
+            textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(4rem,14vw,14rem)] leading-none"
           >
             Milestones
           </ScrollFloat>
@@ -573,47 +624,55 @@ function App() {
         </div>
       </section>
 
-      <section className="relative z-30 min-h-[100svh] md:h-screen bg-white text-black">
-        <div className="h-full w-full flex items-center justify-center px-6 md:px-10">
+      <section className="relative z-30 min-h-[40svh] md:min-h-[100svh] bg-white text-black">
+        <div className="min-h-[40svh] md:min-h-[100svh] w-full flex items-center justify-start px-6 md:px-10 py-16 md:py-0">
           <ScrollFloat
             animationDuration={1}
             ease="back.inOut(2)"
-            scrollStart="center bottom+=50%"
-            scrollEnd="bottom bottom-=40%"
+            scrollStart="top bottom"
+            scrollEnd="bottom 50%"
             stagger={0.03}
             containerClassName="m-0"
-            textClassName="text-black uppercase font-extrabold tracking-tight whitespace-nowrap text-[clamp(2.75rem,11vw,10.5rem)] leading-none"
+            textClassName="text-left text-black uppercase font-extrabold tracking-tight text-[clamp(4rem,16vw,14rem)] leading-none"
           >
             ReachOut
           </ScrollFloat>
         </div>
       </section>
 
-      <section id="contact" className="relative z-30 bg-white text-black min-h-[100svh]">
-        <div className="mx-auto w-full max-w-6xl px-6 md:px-10 min-h-[100svh] flex items-start md:items-center py-16">
-          <div className="grid w-full gap-10 md:gap-12 md:grid-cols-[1.1fr_1fr] items-start">
-            <div className="flex flex-col justify-center">
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-400 mb-5">Reach Out</p>
-              <h2 className="text-black font-extrabold tracking-tighter text-[clamp(3rem,3.5vw,5rem)] leading-[0.95]">
-                Let&apos;s build something <br /> together.
-              </h2>
-              <p className="mt-8 text-lg text-gray-600 max-w-md leading-relaxed">
-                Share your idea, timeline, or just say hello. I reply quickly and love collaborating on ambitious builds.
-              </p>
-              <div className="mt-8 text-sm text-gray-500">
-                Prefer email? Reach me directly at
-                <a href={`mailto:${contactEmail}`} className="ml-2 font-semibold text-black hover:underline transition-all">
-                  {contactEmail}
-                </a>
+      <section id="contact" className="relative z-30 min-h-[100svh] overflow-hidden bg-white text-black">
+        <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 min-h-[100svh] flex items-start md:items-center py-16 relative">
+          <div className="grid w-full gap-8 md:gap-12 lg:gap-16 md:grid-cols-[1.05fr_1fr] items-stretch">
+            <div className="flex flex-col justify-between rounded-[2rem] border border-black/10 bg-white/80 backdrop-blur-sm p-8 md:p-10 shadow-[0_24px_80px_rgba(0,0,0,0.08)]">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500 mb-5">Reach Out</p>
+                <h2 className="text-black font-extrabold tracking-tighter text-[clamp(2.6rem,4vw,5.2rem)] leading-[0.92]">
+                  Let&apos;s build something <br /> together.
+                </h2>
+                <p className="mt-7 text-lg text-gray-600 max-w-xl leading-relaxed">
+                  Share your idea, timeline, or just say hello. I reply quickly and love collaborating on ambitious builds.
+                </p>
+              </div>
+              <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="rounded-2xl border border-black/10 bg-black text-white px-5 py-4">
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-white/70">Response</p>
+                  <p className="mt-1 text-xl font-bold">Within 24 hours</p>
+                </div>
+                <div className="rounded-2xl border border-black/10 bg-white px-5 py-4">
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Primary Channel</p>
+                  <a href={`mailto:${contactEmail}`} className="mt-1 block text-sm md:text-base font-semibold text-black hover:underline break-all">
+                    {contactEmail}
+                  </a>
+                </div>
               </div>
             </div>
 
             <form
               onSubmit={handleContactSubmit}
-              className="rounded-3xl border border-gray-400 bg-white p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] space-y-6 flex flex-col"
+              className="rounded-[2rem] border border-black/10 bg-white p-8 md:p-10 shadow-[0_24px_80px_rgba(0,0,0,0.1)] space-y-6 flex flex-col"
             >
               <div className="space-y-3">
-                <label htmlFor="contact-message" className="text-sm font-semibold text-gray-700">
+                <label htmlFor="contact-message" className="text-sm font-semibold text-gray-700 uppercase tracking-[0.08em]">
                   Message
                 </label>
                 <Textarea
@@ -622,7 +681,7 @@ function App() {
                   placeholder="Tell me about your project..."
                   rows={6}
                   required
-                  className="resize-none rounded-xl border-gray-300 bg-gray-50/50 p-4 text-black placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-black focus-visible:border-black transition-all"
+                  className="resize-none rounded-2xl border-gray-300 bg-gray-50 p-4 text-black placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-black focus-visible:border-black transition-all"
                 />
               </div>
 
@@ -630,11 +689,11 @@ function App() {
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full rounded-xl bg-black py-6 text-base font-semibold text-white shadow-md hover:bg-gray-900 transition-all hover:scale-[1.02]"
+                  className="w-full rounded-2xl bg-black py-6 text-base font-semibold text-white shadow-md hover:bg-gray-900 transition-all hover:scale-[1.01]"
                 >
                   Send Email
                 </Button>
-                <p className="text-center text-xs text-gray-400">
+                <p className="text-center text-xs text-gray-500">
                   This opens your default email app with the message prefilled.
                 </p>
               </div>
@@ -647,3 +706,4 @@ function App() {
 }
 
 export default App;
+
