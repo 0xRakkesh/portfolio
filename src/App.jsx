@@ -13,6 +13,8 @@ import ScrollFloat from './components/ScrollFloat';
 import FlowingMenu from './components/FlowingMenu';
 import ProjectAccordion from './components/ProjectAccordion';
 import SkillSection from './components/SkillSection';
+import LoadingScreen from './components/LoadingScreen';
+import { AnimatePresence } from 'framer-motion';
 import { Button } from './components/ui/button';
 import { SmoothCursor } from './components/ui/smooth-cursor';
 import { Input } from './components/ui/input';
@@ -34,7 +36,8 @@ import {
   HardDrives,
   Folder,
   Key,
-  ShieldCheck
+  ShieldCheck,
+  ArrowUp
 } from "@phosphor-icons/react";
 
 if (typeof window !== 'undefined' && !window.__lenis) {
@@ -62,28 +65,6 @@ const socialIconMap = {
   LinkedIn: LinkedinLogo
 };
 
-const skillsFlowItems = [
-  {
-    link: '#',
-    text: 'Backend',
-    marqueeText: '|NODE|✦|EXPRESS|✦|REST|✦|'
-  },
-  {
-    link: '#',
-    text: 'Database',
-    marqueeText: '|MONGODB|✦|REDIS|✦|POSTGRESS|✦|'
-  },
-  {
-    link: '#',
-    text: 'Security',
-    marqueeText: '|JWT|✦|BCRYPT|✦|OAUTH|✦|'
-  },
-  {
-    link: '#',
-    text: 'Others',
-    marqueeText: '|GIT|✦|GITHUB|✦|GSAP|✦|'
-  }
-];
 
 const newSkillsData = [
   {
@@ -119,7 +100,6 @@ const newSkillsData = [
       { name: "Git", icon: GitBranch, color: "#F05032" },
       { name: "GitHub", icon: GithubLogo, color: "#ffffff" },
       { name: "GSAP", icon: Sparkle, color: "#88CE02" },
-      { name: "Postman", icon: Code, color: "#ff6c37" },
       { name: "Linux", icon: HardDrives, color: "#eab308" }
     ]
   }
@@ -192,7 +172,7 @@ const MilestonesFlowItems = [
   {
     link: '#',
     text: 'EDUCHAIN S3 GLOBAL Finalist',
-    marqueeText: '|EDUCHAIN S3 GLOBAL|✦|FINALIST|✦|',
+    marqueeText: '|EDUCHAIN S3|✦|GLOBAL FINALIST|✦|',
     images: [
       '/photos/educhain.jpeg'
     ]
@@ -215,6 +195,7 @@ function App() {
   const projectsGridSectionRef = useRef(null);
   const [resumeViews, setResumeViews] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useGSAP(
     () => {
@@ -368,6 +349,17 @@ function App() {
     form.reset();
   };
 
+  const handleScrollToTop = () => {
+    const lenis = typeof window !== 'undefined' ? window.__lenis : null;
+
+    if (lenis && typeof lenis.scrollTo === 'function') {
+      lenis.scrollTo(0, { duration: 1.2 });
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const fetchCounterValue = async (options = {}) => {
     const response = await fetch(RESUME_VIEWS_ENDPOINT, {
       method: 'GET',
@@ -435,6 +427,30 @@ function App() {
     return () => mediaQuery.removeEventListener('change', updateMobileState);
   }, []);
 
+  useEffect(() => {
+    if (typeof document === 'undefined') {
+      return undefined;
+    }
+
+    const body = document.body;
+    const root = document.documentElement;
+    const previousBodyOverflow = body.style.overflow;
+    const previousRootOverflow = root.style.overflow;
+
+    if (isLoading) {
+      body.style.overflow = 'hidden';
+      root.style.overflow = 'hidden';
+    } else {
+      body.style.overflow = previousBodyOverflow;
+      root.style.overflow = previousRootOverflow;
+    }
+
+    return () => {
+      body.style.overflow = previousBodyOverflow;
+      root.style.overflow = previousRootOverflow;
+    };
+  }, [isLoading]);
+
   const formattedResumeViews = resumeViews.toLocaleString();
   const milestonesItemsForView = isMobile
     ? MilestonesFlowItems.map(item => {
@@ -448,8 +464,15 @@ function App() {
 
   return (
     <>
-      <SmoothCursor />
-      <div ref={appRef} id="me" className="w-full min-h-screen bg-white overflow-x-hidden relative max-w-[100vw]">
+      <AnimatePresence>
+        {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+      </AnimatePresence>
+      {!isLoading && <SmoothCursor />}
+      <div 
+        ref={appRef} 
+        id="me" 
+        className={`w-full min-h-screen bg-white overflow-x-hidden relative max-w-[100vw] ${isLoading ? 'h-screen overflow-hidden' : ''}`}
+      >
         <div ref={dotFieldRef} className="absolute inset-0 z-0">
           <DotField
             dotRadius={1.5}
@@ -684,7 +707,7 @@ function App() {
 
       <section id="contact" className="relative z-30 min-h-[100svh] overflow-hidden bg-white text-black">
         <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 min-h-[100svh] flex items-start md:items-center py-16 relative">
-          <div className="grid w-full gap-8 md:gap-12 lg:gap-16 md:grid-cols-[1.05fr_1fr] items-stretch">
+          <div className="grid w-full gap-8 md:gap-12 lg:gap-16 md:grid-cols-2 items-stretch">
             <div className="flex flex-col justify-between rounded-[2rem] border border-black/10 bg-white/80 backdrop-blur-sm p-8 md:p-10 shadow-[0_24px_80px_rgba(0,0,0,0.08)]">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500 mb-5">Reach Out</p>
@@ -698,11 +721,11 @@ function App() {
               <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="rounded-2xl border border-black/10 bg-black text-white px-5 py-4">
                   <p className="text-[11px] uppercase tracking-[0.22em] text-white/70">Response</p>
-                  <p className="mt-1 text-xl font-bold">Within 24 hours</p>
+                  <p className="mt-1 text-xs md:text-sm font-medium font-bold">Within 24 hours</p>
                 </div>
                 <div className="rounded-2xl border border-black/10 bg-white px-5 py-4">
                   <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Primary Channel</p>
-                  <a href={`mailto:${contactEmail}`} className="mt-1 block text-sm md:text-base font-semibold text-black hover:underline break-all">
+                  <a href={`mailto:${contactEmail}`} className="mt-1 block text-xs md:text-sm font-medium text-black hover:underline break-all">
                     {contactEmail}
                   </a>
                 </div>
@@ -742,6 +765,15 @@ function App() {
             </form>
           </div>
         </div>
+
+        <button
+          type="button"
+          aria-label="Scroll to top"
+          onClick={handleScrollToTop}
+          className="absolute left-1/2 bottom-6 md:bottom-10 -translate-x-1/2 h-14 w-14 rounded-full border border-black/10 bg-white text-black shadow-[0_18px_40px_rgba(0,0,0,0.18)] transition-transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
+        >
+          <ArrowUp size={22} weight="bold" className="mx-auto" />
+        </button>
       </section>
     </>
   );
