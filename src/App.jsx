@@ -628,7 +628,7 @@ function App() {
               ref={skillsDividerRef}
               src="/icons/Abstract Shape.png"
               alt="decorative shape"
-              className="pointer-events-none w-[5.2rem] h-[5.2rem] md:w-[15rem] md:h-[15rem] lg:w-[17rem] lg:h-[17rem] object-contain shrink-0"
+              className="pointer-events-none w-[5.2rem] h-[5.2rem] md:w-[15rem] md:h-[15rem] lg:w-[17rem] lg:h-[17rem] -translate-x-2 md:-translate-x-6 lg:-translate-x-8 object-contain shrink-0"
             />
           </div>
         </div>
