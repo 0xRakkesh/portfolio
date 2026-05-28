@@ -620,7 +620,7 @@ function App() {
               scrollEnd="bottom 50%"
               stagger={0.03}
               containerClassName="m-0"
-              textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(4rem,16vw,14rem)] leading-none"
+              textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(2.6rem,14vw,6.2rem)] md:text-[clamp(4rem,16vw,14rem)] leading-none whitespace-nowrap"
             >
               Skills
             </ScrollFloat>
@@ -647,7 +647,7 @@ function App() {
             scrollEnd="bottom 50%"
             stagger={0.03}
              containerClassName="m-0"
-             textClassName="text-left text-black uppercase font-extrabold tracking-tight text-[clamp(4rem,16vw,14rem)] leading-none"
+             textClassName="text-left text-black uppercase font-extrabold tracking-tight text-[clamp(2.6rem,14vw,6.2rem)] md:text-[clamp(4rem,16vw,14rem)] leading-none whitespace-nowrap"
           >
             Projects
           </ScrollFloat>
@@ -667,14 +667,14 @@ function App() {
             scrollEnd="bottom 50%"
             stagger={0.03}
             containerClassName="m-0"
-            textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(3rem,12vw,10rem)] md:text-[clamp(4rem,14vw,14rem)] leading-none"
+            textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(2.4rem,12vw,6rem)] md:text-[clamp(4rem,14vw,14rem)] leading-none whitespace-nowrap"
           >
             Milestones
           </ScrollFloat>
         </div>
       </section>
 
-      <section className="relative z-30 min-h-[100svh] md:h-screen bg-[#120F17] text-white overflow-hidden">
+      <section className="relative z-30 h-[100svh] md:h-screen bg-[#120F17] text-white overflow-hidden">
         <div className="h-full w-full">
           <FlowingMenu
             items={milestonesItemsForView}
@@ -685,6 +685,7 @@ function App() {
             marqueeTextColor="#120F17"
             borderColor="#ffffff"
             itemHeightClassName="h-[28vh] sm:h-[30vh] md:h-[33vh]"
+            autoItemHeight={isMobile}
           />
         </div>
       </section>
@@ -698,7 +699,7 @@ function App() {
             scrollEnd="bottom 50%"
             stagger={0.03}
             containerClassName="m-0"
-            textClassName="text-left text-black uppercase font-extrabold tracking-tight text-[clamp(3rem,12vw,10rem)] md:text-[clamp(4rem,16vw,14rem)] leading-none"
+            textClassName="text-left text-black uppercase font-extrabold tracking-tight text-[clamp(2.4rem,12vw,6rem)] md:text-[clamp(4rem,16vw,14rem)] leading-none whitespace-nowrap"
           >
             ReachOut
           </ScrollFloat>
@@ -711,8 +712,8 @@ function App() {
             <div className="flex flex-col justify-between rounded-[2rem] border border-black/10 bg-white/80 backdrop-blur-sm p-8 md:p-10 shadow-[0_24px_80px_rgba(0,0,0,0.08)]">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500 mb-5">Reach Out</p>
-                <h2 className="text-black font-extrabold tracking-tighter text-[clamp(2.6rem,4vw,5.2rem)] leading-[0.92]">
-                  Let&apos;s build something <br /> together.
+                <h2 className="text-black font-extrabold tracking-tighter text-[clamp(2rem,7vw,3.6rem)] md:text-[clamp(2.6rem,4vw,5.2rem)] leading-[0.92]">
+                  Let&apos;s build something <br className="hidden md:block" /> together.
                 </h2>
                 <p className="mt-7 text-lg text-gray-600 max-w-xl leading-relaxed">
                   Share your idea, timeline, or just say hello. I reply quickly and love collaborating on ambitious builds.
@@ -759,7 +760,7 @@ function App() {
                   Send Email
                 </Button>
                 <p className="text-center text-xs text-gray-500">
-                  This opens your default email app with the message prefilled.
+                  This opens your default email app
                 </p>
               </div>
             </form>
@@ -770,7 +771,7 @@ function App() {
           type="button"
           aria-label="Scroll to top"
           onClick={handleScrollToTop}
-          className="absolute left-1/2 bottom-6 md:bottom-10 -translate-x-1/2 h-14 w-14 rounded-full border border-black/10 bg-white text-black shadow-[0_18px_40px_rgba(0,0,0,0.18)] transition-transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
+          className="hidden md:flex absolute left-1/2 bottom-6 md:bottom-10 -translate-x-1/2 h-14 w-14 items-center justify-center rounded-full border border-black/10 bg-white text-black shadow-[0_18px_40px_rgba(0,0,0,0.18)] transition-transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
         >
           <ArrowUp size={22} weight="bold" className="mx-auto" />
         </button>

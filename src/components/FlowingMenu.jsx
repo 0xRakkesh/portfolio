@@ -9,8 +9,14 @@ function FlowingMenu({
   marqueeBgColor = '#fff',
   marqueeTextColor = '#120F17',
   borderColor = '#fff',
-  itemHeightClassName = 'h-[16vh] md:h-[18vh] lg:h-[20vh]'
+  itemHeightClassName = 'h-[16vh] md:h-[18vh] lg:h-[20vh]',
+  autoItemHeight = false
 }) {
+  const itemHeightStyle =
+    autoItemHeight && items.length > 0
+      ? { height: `${100 / items.length}%` }
+      : undefined;
+
   return (
     <div
       className="w-full h-full overflow-hidden"
@@ -26,6 +32,7 @@ function FlowingMenu({
             marqueeTextColor={marqueeTextColor}
             borderColor={borderColor}
             itemHeightClassName={itemHeightClassName}
+            itemHeightStyle={itemHeightStyle}
             isFirst={idx === 0} />
         ))}
       </nav>
@@ -43,6 +50,7 @@ function MenuItem({
   marqueeTextColor,
   borderColor,
   itemHeightClassName,
+  itemHeightStyle,
   isFirst
 }) {
   const itemRef = useRef(null);
@@ -166,14 +174,17 @@ function MenuItem({
       onMouseLeave={handleMouseLeave}
       onTouchStart={handleMouseEnter}
       onTouchEnd={handleMouseLeave}
-      style={{ borderTop: isFirst ? 'none' : `1px solid ${borderColor}` }}>
+      style={{
+        borderTop: isFirst ? 'none' : `1px solid ${borderColor}`,
+        ...itemHeightStyle
+      }}>
       <div
         ref={itemLabelRef}
-        className="flex items-center justify-between h-full relative cursor-default select-none uppercase font-bold text-[5.6vh] tracking-tight px-6 md:px-10 lg:px-14"
+        className="flex items-center justify-between h-full relative cursor-default select-none uppercase font-bold text-[clamp(1.6rem,8vw,3rem)] md:text-[5.6vh] tracking-tight px-6 md:px-10 lg:px-14"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{ color: textColor }}>
-        <span className="text-left leading-none">{text}</span>
+        <span className="text-left leading-none whitespace-nowrap">{text}</span>
         <div className="hidden md:flex items-center justify-end w-[28vw] max-w-[520px] min-w-[260px] h-[68%] overflow-hidden rounded-2xl border border-white/15 bg-black/10">
           <div className="h-full w-full p-2">
             <img
@@ -200,7 +211,7 @@ function MenuItem({
                 return (
                   <span
                     key={`${token}-${tokenIdx}`}
-                    className={`whitespace-nowrap uppercase font-semibold leading-[1.05] ${isStarToken ? 'text-[7vh] md:text-[7.6vh]' : 'text-[5.4vh]'}`}
+                    className={`whitespace-nowrap uppercase font-semibold leading-[1.05] ${isStarToken ? 'text-[clamp(1.4rem,8vw,3rem)] md:text-[7.6vh]' : 'text-[clamp(1.2rem,7vw,2.6rem)] md:text-[5.4vh]'}`}
                   >
                     {token}
                   </span>

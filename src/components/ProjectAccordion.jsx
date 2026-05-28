@@ -28,7 +28,7 @@ export default function ProjectAccordion({ items }) {
                     <div className="bg-[#120F17] text-white p-1 md:p-1.5 rounded-sm mr-4 md:mr-6 transition-transform group-hover:-translate-y-1">
                       <ArrowUpRight size={24} weight="bold" />
                     </div>
-                    <h3 className="text-3xl md:text-5xl font-extrabold uppercase tracking-tight text-[#120F17]">
+                    <h3 className="text-[clamp(1.6rem,7.5vw,2.6rem)] md:text-5xl font-extrabold uppercase tracking-tight text-[#120F17] whitespace-nowrap">
                       {item.title}
                     </h3>
                   </div>
@@ -46,12 +46,12 @@ export default function ProjectAccordion({ items }) {
                         <div className="bg-[#120F17] text-white w-12 h-12 flex items-center justify-center rounded-sm shrink-0">
                           {item.icon ? React.createElement(item.icon, { size: 28, weight: "bold" }) : index + 1}
                         </div>
-                        <h2 className="text-5xl md:text-7xl font-extrabold tracking-tight text-[#120F17]">
+                        <h2 className="text-[clamp(2rem,9vw,3.4rem)] md:text-7xl font-extrabold tracking-tight text-[#120F17] whitespace-nowrap">
                           {item.title}
                         </h2>
                       </div>
                       
-                      <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl leading-relaxed">
+                      <p className="text-base md:text-xl text-gray-700 mb-8 max-w-2xl leading-relaxed">
                         {item.description}
                       </p>
 

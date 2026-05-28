@@ -53,7 +53,7 @@ export default function SkillSection({ skillsData }) {
           <div key={idx} className="skill-category flex flex-col md:flex-row md:items-center gap-8 md:gap-16">
             {/* Left side: Category Title */}
             <div className="md:w-1/3 shrink-0">
-              <h3 className="category-title text-5xl md:text-[5rem] font-extrabold uppercase tracking-tight text-gray-300 pointer-events-auto shrink-0 select-none leading-none">
+              <h3 className="category-title text-[clamp(2rem,10vw,3.6rem)] md:text-[5rem] font-extrabold uppercase tracking-tight text-gray-300 pointer-events-auto shrink-0 select-none leading-none whitespace-nowrap">
                 {category.category}
               </h3>
             </div>
@@ -66,7 +66,7 @@ export default function SkillSection({ skillsData }) {
                   className="skill-item flex items-center gap-3 bg-white/5 border border-white/10 hover:border-white/30 hover:bg-white/10 transition-all rounded-xl px-5 py-3 shadow-lg"
                 >
                   {item.icon && React.createElement(item.icon, { size: 28, weight: "regular", color: item.color || "#ffffff" })}
-                  <span className="text-lg md:text-xl font-medium tracking-wide">
+                  <span className="text-base md:text-xl font-medium tracking-wide whitespace-nowrap">
                     {item.name}
                   </span>
                 </div>
