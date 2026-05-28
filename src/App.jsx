@@ -156,7 +156,7 @@ const MilestonesFlowItems = [
   {
     link: '#',
     text: 'EIBS 2.0 Finalist',
-    marqueeText: '|EIBS 2.0|✦|FINALIST|✦|',
+    marqueeText: '|EIBS 2.0|✦|FINALIST|✦|IIT KHARAGPUR|✦|',
     images: [
       '/photos/eibs.jpeg'
     ]
@@ -164,7 +164,7 @@ const MilestonesFlowItems = [
   {
     link: '#',
     text: '2nd Runner Up Vibeathon',
-    marqueeText: '|VIBEATHON|✦|2ND RUNNER UP|✦|',
+    marqueeText: "|VIBEATHON|✦|2ND RUNNER UP|✦|DAKSHH'26|✦|",
     images: [
       '/photos/Vibe-A-thon.png'
     ]
@@ -172,7 +172,7 @@ const MilestonesFlowItems = [
   {
     link: '#',
     text: 'EDUCHAIN S3 GLOBAL Finalist',
-    marqueeText: '|EDUCHAIN S3|✦|GLOBAL FINALIST|✦|',
+    marqueeText: '|EDUCHAIN S3|✦|GLOBAL FINALIST|✦|TOP 120 TEAMS|✦|',
     images: [
       '/photos/educhain.jpeg'
     ]
@@ -516,7 +516,7 @@ function App() {
           >
             <h1 className="mt-20 sm:mt-24 md:mt-48 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[0.95] text-center lg:text-left max-w-5xl mx-auto lg:mx-0 text-black pb-2">
               <SplitText
-                text="Rakesh Adak"
+                text="RAKESH ADAK"
                 className=""
                 delay={20}
                 duration={1.0}
@@ -533,9 +533,9 @@ function App() {
             </h1>
             <div
               ref={bioRef}
-              className="mt-4 sm:mt-2 ml-0 sm:ml-2 md:ml-4 pr-0 sm:pr-8 md:pr-24 text-base sm:text-lg md:text-2xl text-gray-800 max-w-3xl mx-auto lg:mx-0 leading-relaxed text-center sm:text-left"
+              className="mt-4 sm:mt-2 ml-0 sm:ml-2 md:ml-4 pr-0 sm:pr-8 md:pr-24 text-[clamp(1rem,2.2vw,1.6rem)] text-black/70 max-w-3xl mx-auto lg:mx-0 leading-snug tracking-tight text-center sm:text-left"
             >
-              <p className="font-medium">
+              <p className="font-semibold">
                 Backend Developer focused on <span style={{ color: '#5227FF' }}>Node.js</span>, <span style={{ color: '#5227FF' }}>Express.js</span>, and <span style={{ color: '#5227FF' }}>MongoDB</span>, building secure REST APIs and scalable web applications with clean, maintainable code.
               </p>
 
@@ -559,7 +559,7 @@ function App() {
                     >
                       <Button
                         size="lg"
-                        className="w-full sm:w-auto text-base px-8 h-12 bg-white text-black rounded-full z-10 border border-black/10"
+                        className="w-full sm:w-auto text-base px-8 h-12 rounded-full bg-black text-white border border-black/10 shadow-[0_12px_26px_rgba(0,0,0,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60"
                       >
                         Get Resume
                       </Button>

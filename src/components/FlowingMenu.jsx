@@ -195,11 +195,17 @@ function MenuItem({
               className="marquee-part flex items-center flex-shrink-0 gap-[3.2vw] px-[3.2vw]"
               key={idx}
               style={{ color: marqueeTextColor }}>
-              {marqueeTokens.map((token, tokenIdx) => (
-                <span key={`${token}-${tokenIdx}`} className="whitespace-nowrap uppercase font-semibold text-[5.4vh] leading-[1.05]">
-                  {token}
-                </span>
-              ))}
+              {marqueeTokens.map((token, tokenIdx) => {
+                const isStarToken = token === '✦';
+                return (
+                  <span
+                    key={`${token}-${tokenIdx}`}
+                    className={`whitespace-nowrap uppercase font-semibold leading-[1.05] ${isStarToken ? 'text-[7vh] md:text-[7.6vh]' : 'text-[5.4vh]'}`}
+                  >
+                    {token}
+                  </span>
+                );
+              })}
             </div>
           ))}
         </div>
