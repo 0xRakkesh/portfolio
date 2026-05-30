@@ -559,7 +559,7 @@ function App() {
                     >
                       <Button
                         size="lg"
-                        className="w-full sm:w-auto text-base px-8 h-12 rounded-full bg-black text-white border border-black/10 shadow-[0_12px_26px_rgba(0,0,0,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60"
+                        className="w-full sm:w-auto text-base px-8 h-12 rounded-full bg-black text-white border border-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/60"
                       >
                         Get Resume
                       </Button>
