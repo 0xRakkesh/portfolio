@@ -110,7 +110,7 @@ const projectItems = [
     label: 'Web3 • Android',
     title: 'nanobonds',
     description:
-      'DeFi platform for fractional investment in government bonds using stablecoins with real-time yield visualization.',
+      '3-contract Solidity system — bond pool, ERC-20 share token, and yield logic — backed by IPFS-hosted metadata. Android client streams real-time APY, maturity, and cashflow data directly from on-chain state.',
     stack: ['Web3', 'Solidity', 'Android', 'IPFS'],
     link: 'https://github.com/BikramMondal5/Nano-Bond/tree/main/Android',
     color: '#120F17',
@@ -121,7 +121,7 @@ const projectItems = [
     label: 'Web3 • IPFS',
     title: 'w3deploy',
     description:
-      'Native IPFS deployment pipeline for frontend projects from GitHub and AI agent-driven workflows.',
+      '1-command IPFS pipeline that builds, pins to Pinata, and returns a verifiable CID. Hono API handles deploy webhooks and status; Algorand registry powers instant project lookup via CLI or MCP agent.',
     stack: ['Next.js', 'Hono API', 'IPFS/Pinata', 'Algorand'],
     link: 'https://github.com/Rakesh-ada/w3deploy',
     color: '#120F17',
@@ -130,9 +130,9 @@ const projectItems = [
   },
   {
     label: 'Offline-first',
-    title: 'Invo',
+    title: 'invo',
     description:
-      'Offline-first inventory POS system built with React Native, SQLite, and Gemini-powered AI insights.',
+      'Offline-first inventory and POS on 4 indexed SQLite tables with a reconnect sync queue. Gemini RAG with 128-dim vector store powers AI insights; auto-generates weekly PDF reports across catalog, billing, and analytics.',
     stack: ['React Native (Expo)', 'SQLite', 'TypeScript', 'Google Gemini'],
     link: 'https://github.com/Rakesh-ada/InVo',
     color: '#120F17',
@@ -141,9 +141,9 @@ const projectItems = [
   },
   {
     label: 'Desktop',
-    title: 'Neo',
+    title: 'neo',
     description:
-      'Always-on-top desktop AI chat assistant powered by Gemini and n8n with custom automation pipelines.',
+      'Always-on-top Electron assistant with 1-key global summon and dual AI engine that auto-switches between n8n and Gemini. Voice I/O via Google STT and ElevenLabs; ships 5+ importable n8n workflow templates.',
     stack: ['Electron', 'Node.js', 'Google Gemini', 'n8n', 'ElevenLabs'],
     link: 'https://github.com/Rakesh-ada/Neo',
     color: '#120F17',
