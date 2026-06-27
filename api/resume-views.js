@@ -1,19 +1,20 @@
-import { kv } from '@vercel/kv';
+import { getRedisClient } from './redis.js';
 
 const COUNTER_KEY = 'resume:views';
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0');
+  const redis = getRedisClient();
 
   try {
     if (req.method === 'GET') {
-      const value = await kv.get(COUNTER_KEY);
+      const value = await redis.get(COUNTER_KEY);
       const numberValue = typeof value === 'number' ? value : Number(value) || 0;
       return res.status(200).json({ value: numberValue });
     }
 
     if (req.method === 'POST') {
-      const value = await kv.incr(COUNTER_KEY);
+      const value = await redis.incr(COUNTER_KEY);
       return res.status(200).json({ value });
     }
 

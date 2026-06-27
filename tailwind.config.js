@@ -19,6 +19,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Sora', 'sans-serif'],
+        body: ['"DM Sans"', 'sans-serif'],
       },
       transitionTimingFunction: {
         standard: 'cubic-bezier(0.4,0,0.2,1)',

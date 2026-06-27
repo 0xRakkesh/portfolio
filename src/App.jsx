@@ -13,6 +13,7 @@ import ScrollFloat from './components/ScrollFloat';
 import FlowingMenu from './components/FlowingMenu';
 import ProjectAccordion from './components/ProjectAccordion';
 import SkillSection from './components/SkillSection';
+import TestimonialSection from './components/TestimonialSection';
 import LoadingScreen from './components/LoadingScreen';
 import { AnimatePresence } from 'framer-motion';
 import { Button } from './components/ui/button';
@@ -37,7 +38,8 @@ import {
   Folder,
   Key,
   ShieldCheck,
-  ArrowUp
+  ArrowUp,
+  EnvelopeSimple
 } from "@phosphor-icons/react";
 
 if (typeof window !== 'undefined' && !window.__lenis) {
@@ -49,7 +51,8 @@ gsap.registerPlugin(ScrollTrigger);
 const menuItems = [
   { label: 'Skills', ariaLabel: 'View skills section', link: '#skills' },
   { label: 'Projects', ariaLabel: 'View projects section', link: '#projects' },
-  { label: 'Milestones', ariaLabel: 'View Milestones section', link: '#Milestones' },
+  { label: 'Winners', ariaLabel: 'View Winners section', link: '#Winners' },
+  { label: 'Reviews', ariaLabel: 'View Reviews section', link: '#reviews' },
   { label: 'Reach Out', ariaLabel: 'Reach Out section', link: '#contact' }
 ];
 
@@ -192,6 +195,7 @@ function App() {
   const skillsSectionRef = useRef(null);
   const skillsMenuRef = useRef(null);
   const skillsDividerRef = useRef(null);
+  const winsSectionRef = useRef(null);
   const projectsGridSectionRef = useRef(null);
   const [resumeViews, setResumeViews] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -328,6 +332,8 @@ function App() {
     };
   }, { dependencies: [] });
 
+
+
   const handleAnimationComplete = () => {
     console.log('All letters have animated!');
   };
@@ -337,10 +343,15 @@ function App() {
 
     const form = event.currentTarget;
     const formData = new FormData(form);
+    const name = String(formData.get('name') || '').trim();
+    const email = String(formData.get('email') || '').trim();
     const message = String(formData.get('message') || '').trim();
 
-    const subject = 'Portfolio contact';
+    const subject = `Portfolio Contact from ${name || 'a visitor'}`;
     const body = [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      '',
       message || 'Hi Rakesh,'
     ].join('\n');
 
@@ -658,19 +669,22 @@ function App() {
         <ProjectAccordion items={projectItems} />
       </section>
 
-      <section id="Milestones" className="relative z-30 min-h-[40svh] md:min-h-[100svh] bg-[#120F17] text-white">
-        <div className="min-h-[40svh] md:min-h-[100svh] w-full flex items-center justify-start px-6 md:px-10 py-16 md:py-0">
-          <ScrollFloat
-            animationDuration={1}
-            ease="back.inOut(2)"
-            scrollStart="top bottom"
-            scrollEnd="bottom 50%"
-            stagger={0.03}
-            containerClassName="m-0"
-            textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(2.4rem,12vw,6rem)] md:text-[clamp(4rem,14vw,14rem)] leading-none whitespace-nowrap"
-          >
-            Milestones
-          </ScrollFloat>
+      <section ref={winsSectionRef} id="Winners" className="relative z-30 min-h-[40svh] md:min-h-[100svh] bg-[#120F17] text-white flex items-center">
+        <div className="w-full flex items-center justify-start px-6 md:px-10">
+          <div className="flex w-full items-center justify-between">
+            <ScrollFloat
+              animationDuration={1}
+              ease="back.inOut(2)"
+              scrollStart="top bottom"
+              scrollEnd="bottom 50%"
+              stagger={0.03}
+              containerClassName="m-0"
+              textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(2.6rem,14vw,6.2rem)] md:text-[clamp(4rem,16vw,14rem)] leading-none whitespace-nowrap"
+            >
+              Winners
+            </ScrollFloat>
+            
+          </div>
         </div>
       </section>
 
@@ -690,8 +704,8 @@ function App() {
         </div>
       </section>
 
-      <section className="relative z-30 min-h-[40svh] md:min-h-[100svh] bg-white text-black">
-        <div className="min-h-[40svh] md:min-h-[100svh] w-full flex items-center justify-start px-6 md:px-10 py-16 md:py-0">
+      <section id="reviews" className="relative z-40 min-h-[40svh] md:min-h-[100svh] bg-white text-black flex items-center">
+        <div className="w-full flex items-center justify-start px-6 md:px-10 py-0">
           <ScrollFloat
             animationDuration={1}
             ease="back.inOut(2)"
@@ -699,82 +713,120 @@ function App() {
             scrollEnd="bottom 50%"
             stagger={0.03}
             containerClassName="m-0"
-            textClassName="text-left text-black uppercase font-extrabold tracking-tight text-[clamp(2.4rem,12vw,6rem)] md:text-[clamp(4rem,16vw,14rem)] leading-none whitespace-nowrap"
+            textClassName="text-left text-black uppercase font-extrabold tracking-tight text-[clamp(2.6rem,14vw,6.2rem)] md:text-[clamp(4rem,16vw,14rem)] leading-none whitespace-nowrap"
           >
-            ReachOut
+            Reviews
           </ScrollFloat>
         </div>
       </section>
 
-      <section id="contact" className="relative z-30 min-h-[100svh] overflow-hidden bg-white text-black">
-        <div className="mx-auto w-full max-w-[1600px] px-6 md:px-10 min-h-[100svh] flex items-start md:items-center py-16 relative">
-          <div className="grid w-full gap-8 md:gap-12 lg:gap-16 md:grid-cols-2 items-stretch">
-            <div className="flex flex-col justify-between rounded-[2rem] border border-black/10 bg-white/80 backdrop-blur-sm p-8 md:p-10 shadow-[0_24px_80px_rgba(0,0,0,0.08)]">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500 mb-5">Reach Out</p>
-                <h2 className="text-black font-extrabold tracking-tighter text-[clamp(2rem,7vw,3.6rem)] md:text-[clamp(2.6rem,4vw,5.2rem)] leading-[0.92]">
-                  Let&apos;s build something <br className="hidden md:block" /> together.
-                </h2>
-                <p className="mt-7 text-lg text-gray-600 max-w-xl leading-relaxed">
-                  Share your idea, timeline, or just say hello. I reply quickly and love collaborating on ambitious builds.
-                </p>
-              </div>
-              <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="rounded-2xl border border-black/10 bg-black text-white px-5 py-4">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-white/70">Response</p>
-                  <p className="mt-1 text-xs md:text-sm font-medium font-bold">Within 24 hours</p>
+      <TestimonialSection />
+
+
+      <section id="contact" className="relative z-30 min-h-[100svh] overflow-hidden bg-[#120F17] text-white flex items-center py-16 md:py-20 lg:py-24">
+        <div className="mx-auto w-full max-w-[1400px] px-6 md:px-10 relative">
+          
+          <div className="bg-[#0B0C10] text-white rounded-[2rem] shadow-[0_24px_80px_rgba(0,0,0,0.5)] p-4 md:p-6 lg:p-8 border border-white/5 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-4">
+              
+              {/* Left Side: Info */}
+              <div className="p-6 md:p-8 lg:p-10 flex flex-col gap-8 lg:gap-12">
+                <div>
+                  <div className="inline-block px-5 py-2 rounded-full bg-white text-black text-sm font-semibold mb-6 shadow-sm">
+                    Get in touch
+                  </div>
+                  <h2 className="text-4xl md:text-5xl xl:text-[3.5rem] font-bold tracking-tight leading-[1.1] mb-6">
+                    Let's build something<br />together.
+                  </h2>
+                  <p className="text-lg text-gray-400 leading-relaxed">
+                    I'm actively looking for internships and open-source collaborations. Drop a message!
+                  </p>
                 </div>
-                <div className="rounded-2xl border border-black/10 bg-white px-5 py-4">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Primary Channel</p>
-                  <a href={`mailto:${contactEmail}`} className="mt-1 block text-xs md:text-sm font-medium text-black hover:underline break-all">
-                    {contactEmail}
-                  </a>
+                
+                <div className="flex flex-col gap-6 text-gray-300">
+                  <div className="flex items-center gap-4">
+                    <div>
+                      <GlobeHemisphereWest size={24} weight="regular" className="text-white" />
+                    </div>
+                    <div>
+                      <p className="text-white text-base">West Bengal, India</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div>
+                      <EnvelopeSimple size={24} weight="regular" className="text-white" />
+                    </div>
+                    <div>
+                      <a href={`mailto:${contactEmail}`} className="text-base text-white hover:underline transition-colors">{contactEmail}</a>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              {/* Right Side: Form (The White Box) */}
+              <div className="bg-white text-black p-6 md:p-8 lg:p-10 rounded-[1.5rem] shadow-xl flex flex-col justify-center self-center w-full">
+                <h3 className="text-2xl md:text-3xl font-extrabold mb-8">Send a message</h3>
+                
+                <form onSubmit={handleContactSubmit} className="space-y-4">
+                  <div>
+                    <Input
+                      id="contact-name"
+                      name="name"
+                      placeholder="Username *"
+                      required
+                      className="w-full bg-white border border-gray-200 rounded-lg px-4 py-5 focus-visible:ring-1 focus-visible:ring-black focus-visible:border-black transition-all text-black placeholder:text-gray-500 shadow-sm"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Input
+                      id="contact-phone"
+                      name="phone"
+                      type="tel"
+                      placeholder="Phone number *"
+                      className="w-full bg-white border border-gray-200 rounded-lg px-4 py-5 focus-visible:ring-1 focus-visible:ring-black focus-visible:border-black transition-all text-black placeholder:text-gray-500 shadow-sm"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Input
+                      id="contact-email"
+                      name="email"
+                      type="email"
+                      placeholder="Email address *"
+                      required
+                      className="w-full bg-white border border-gray-200 rounded-lg px-4 py-5 focus-visible:ring-1 focus-visible:ring-black focus-visible:border-black transition-all text-black placeholder:text-gray-500 shadow-sm"
+                    />
+                  </div>
+                  
+                  <div>
+                    <Textarea
+                      id="contact-message"
+                      name="message"
+                      placeholder="Message *"
+                      rows={4}
+                      required
+                      className="resize-none w-full bg-white border border-gray-200 rounded-lg px-4 py-5 focus-visible:ring-1 focus-visible:ring-black focus-visible:border-black transition-all text-black placeholder:text-gray-500 shadow-sm"
+                    />
+                  </div>
+                  
+                  <div className="pt-2">
+                    <Button
+                      type="submit"
+                      className="w-full sm:w-auto px-8 rounded-lg bg-[#0B0C10] text-white font-medium hover:bg-black transition-colors py-6 text-sm shadow-md"
+                    >
+                      Submit Inquiry
+                    </Button>
+                  </div>
+                </form>
+              </div>
+              
             </div>
-
-            <form
-              onSubmit={handleContactSubmit}
-              className="rounded-[2rem] border border-black/10 bg-white p-8 md:p-10 shadow-[0_24px_80px_rgba(0,0,0,0.1)] space-y-6 flex flex-col"
-            >
-              <div className="space-y-3">
-                <label htmlFor="contact-message" className="text-sm font-semibold text-gray-700 uppercase tracking-[0.08em]">
-                  Message
-                </label>
-                <Textarea
-                  id="contact-message"
-                  name="message"
-                  placeholder="Tell me about your project..."
-                  rows={6}
-                  required
-                  className="resize-none rounded-2xl border-gray-300 bg-gray-50 p-4 text-black placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-black focus-visible:border-black transition-all"
-                />
-              </div>
-
-              <div className="space-y-3 pt-2">
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full rounded-2xl bg-black py-6 text-base font-semibold text-white shadow-md hover:bg-gray-900 transition-all hover:scale-[1.01]"
-                >
-                  Send Email
-                </Button>
-                <p className="text-center text-xs text-gray-500">
-                  This opens your default email app
-                </p>
-              </div>
-            </form>
           </div>
-        </div>
+          
 
-        <button
-          type="button"
-          aria-label="Scroll to top"
-          onClick={handleScrollToTop}
-          className="hidden md:flex absolute left-1/2 bottom-6 md:bottom-10 -translate-x-1/2 h-14 w-14 items-center justify-center rounded-full border border-black/10 bg-white text-black shadow-[0_18px_40px_rgba(0,0,0,0.18)] transition-transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black"
-        >
-          <ArrowUp size={22} weight="bold" className="mx-auto" />
-        </button>
+        </div>
       </section>
     </>
   );
