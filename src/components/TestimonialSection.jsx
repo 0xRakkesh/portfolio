@@ -297,11 +297,11 @@ export default function TestimonialSection() {
           {renderedReviews.map((testimonial, i) => (
             <div 
               key={i} 
-              className="min-w-[320px] md:min-w-[400px] w-[320px] md:w-[400px] h-[360px] md:h-[400px] flex-shrink-0 flex flex-col justify-between bg-gray-50 border border-gray-200 rounded-3xl p-8 snap-center hover:shadow-lg transition-shadow duration-300"
+              className="min-w-[320px] md:min-w-[400px] w-[320px] md:w-[400px] h-[430px] md:h-[420px] flex-shrink-0 flex flex-col justify-between bg-gray-50 border border-gray-200 rounded-3xl p-8 snap-center hover:shadow-lg transition-shadow duration-300"
             >
               <div>
-                <Quotes size={40} weight="regular" className="text-gray-300 mb-8" />
-                <p className="text-lg text-gray-800 leading-relaxed line-clamp-4">
+                <Quotes size={40} weight="regular" className="text-gray-300 mb-5" />
+                <p className="text-base md:text-lg text-gray-800 leading-relaxed">
                   {testimonial.quote}
                 </p>
               </div>
