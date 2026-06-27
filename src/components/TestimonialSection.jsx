@@ -39,6 +39,8 @@ const testimonials = [
 const placeholderReviews = testimonials.slice(0, 4);
 
 const avatarStyle = new Style(definition);
+const REVIEW_MIN_LENGTH = 60;
+const REVIEW_MAX_LENGTH = 180;
 
 function createAvatarSvg(seed) {
   const avatar = new Avatar(avatarStyle, { seed });
@@ -139,8 +141,15 @@ export default function TestimonialSection() {
     event.preventDefault();
     setFormError('');
 
+    const reviewLength = formData.review.trim().length;
+
     if (!formData.username.trim() || !formData.occupation.trim() || !formData.review.trim()) {
       setFormError('Fill username, occupation, and review.');
+      return;
+    }
+
+    if (reviewLength < REVIEW_MIN_LENGTH || reviewLength > REVIEW_MAX_LENGTH) {
+      setFormError(`Review must be between ${REVIEW_MIN_LENGTH} and ${REVIEW_MAX_LENGTH} characters.`);
       return;
     }
 
@@ -335,9 +344,14 @@ export default function TestimonialSection() {
                   value={formData.review}
                   onChange={handleChange}
                   rows="5"
+                  minLength={REVIEW_MIN_LENGTH}
+                  maxLength={REVIEW_MAX_LENGTH}
                   className="w-full rounded-2xl border border-black/10 bg-gray-50 px-4 py-3 outline-none focus:border-black resize-none"
                   placeholder="Write your review..."
                 />
+                <p className="mt-2 text-xs text-gray-500">
+                  Review length: {REVIEW_MIN_LENGTH}-{REVIEW_MAX_LENGTH} characters.
+                </p>
               </div>
               {formError ? <p className="text-sm font-medium text-red-600">{formError}</p> : null}
               <div className="flex items-center justify-end gap-3 pt-2">

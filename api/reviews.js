@@ -1,6 +1,8 @@
 import { getRedisClient } from './redis.js';
 
 const REVIEWS_KEY = 'portfolio:reviews';
+const REVIEW_MIN_LENGTH = 60;
+const REVIEW_MAX_LENGTH = 180;
 
 function readStoredReviews(value) {
   if (Array.isArray(value)) {
@@ -43,9 +45,16 @@ export default async function handler(req, res) {
 
     if (req.method === 'POST') {
       const { username, occupation, review } = req.body || {};
+      const reviewLength = typeof review === 'string' ? review.trim().length : 0;
 
       if (!username || !occupation || !review) {
         return res.status(400).json({ error: 'Username, occupation, and review are required.' });
+      }
+
+      if (reviewLength < REVIEW_MIN_LENGTH || reviewLength > REVIEW_MAX_LENGTH) {
+        return res.status(400).json({
+          error: `Review must be between ${REVIEW_MIN_LENGTH} and ${REVIEW_MAX_LENGTH} characters.`,
+        });
       }
 
       const nextReview = normalizeReview({ username, occupation, review });
