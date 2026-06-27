@@ -386,7 +386,7 @@ export default function TestimonialSection() {
                     onChange={handleChange}
                     rows="5"
                     minLength={REVIEW_MIN_LENGTH}
-                    className="block w-full rounded-2xl border border-black/10 bg-gray-50 px-4 py-3 pr-28 pb-16 outline-none focus:border-black resize-none"
+                    className="block w-full rounded-2xl border border-black/10 bg-gray-50 px-4 py-3 pb-16 outline-none focus:border-black resize-none"
                     placeholder="Write your review..."
                   />
                   <button
@@ -394,8 +394,7 @@ export default function TestimonialSection() {
                     onClick={handleReviewAssist}
                     disabled={isAssisting}
                     className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-xs font-semibold text-black transition-colors hover:bg-gray-100 shadow-sm"
-                    aria-label="Improve review with AI assist"
-                    title="Improve review with AI assist"
+                    aria-label="AI assist"
                   >
                     <Sparkle size={14} weight="bold" />
                     {isAssisting ? 'Assisting...' : 'AI assist'}

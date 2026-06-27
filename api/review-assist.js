@@ -1,5 +1,6 @@
 const REVIEW_MIN_LENGTH = 60;
 const REVIEW_MAX_LENGTH = 200;
+const AI_TARGET_MIN_LENGTH = 170;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 
 function cleanReview(value) {
@@ -40,7 +41,7 @@ function trimToMaxLength(value) {
   return cleaned.slice(0, end).replace(/[,:;.-]+$/g, '').trim();
 }
 
-function expandToMinLength(value, occupation) {
+function expandToTargetLength(value, occupation) {
   let expanded = cleanReview(value);
   const roleText = occupation ? ` as a ${cleanReview(occupation)}` : '';
   const additions = [
@@ -50,7 +51,7 @@ function expandToMinLength(value, occupation) {
   ];
 
   for (const addition of additions) {
-    if (expanded.length >= REVIEW_MIN_LENGTH) {
+    if (expanded.length >= AI_TARGET_MIN_LENGTH) {
       break;
     }
 
@@ -67,11 +68,11 @@ function expandToMinLength(value, occupation) {
 function fitReviewToRange(value, occupation) {
   const trimmed = trimToMaxLength(value);
 
-  if (trimmed.length >= REVIEW_MIN_LENGTH) {
+  if (trimmed.length >= AI_TARGET_MIN_LENGTH) {
     return trimmed;
   }
 
-  return expandToMinLength(trimmed, occupation);
+  return expandToTargetLength(trimmed, occupation);
 }
 
 async function generateReview(prompt) {
@@ -132,6 +133,7 @@ Rewrite or generate a portfolio review.
 Rules:
 - Return only the review text.
 - Must be between ${REVIEW_MIN_LENGTH} and ${REVIEW_MAX_LENGTH} characters.
+- Aim for ${AI_TARGET_MIN_LENGTH}-${REVIEW_MAX_LENGTH} characters when possible.
 - Never exceed ${REVIEW_MAX_LENGTH} characters.
 - Do not cut off mid-sentence.
 - Do not use quotation marks.
@@ -147,7 +149,7 @@ Draft review: ${draft || 'No draft provided. Generate one concise review.'}
 
     if (generated.length > REVIEW_MAX_LENGTH || generated.length < REVIEW_MIN_LENGTH) {
       generated = fitReviewToRange(await generateReview(`
-Rewrite this review again so it is a complete sentence between ${REVIEW_MIN_LENGTH} and ${REVIEW_MAX_LENGTH} characters.
+Rewrite this review again so it is a complete sentence between ${AI_TARGET_MIN_LENGTH} and ${REVIEW_MAX_LENGTH} characters.
 Return only the review text. Do not exceed ${REVIEW_MAX_LENGTH} characters.
 
 Review: ${generated || draft}
