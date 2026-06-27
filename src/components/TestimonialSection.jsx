@@ -66,6 +66,22 @@ export default function TestimonialSection() {
     review: '',
   });
 
+  const readJsonResponse = async (response) => {
+    const contentType = response.headers.get('content-type') || '';
+
+    if (contentType.includes('application/json')) {
+      return response.json();
+    }
+
+    const text = await response.text();
+
+    try {
+      return JSON.parse(text);
+    } catch {
+      return { error: text || 'Unexpected server response' };
+    }
+  };
+
   useEffect(() => {
     let cancelled = false;
 
@@ -74,7 +90,7 @@ export default function TestimonialSection() {
         const response = await fetch('/api/reviews');
         if (!response.ok) return;
 
-        const data = await response.json();
+        const data = await readJsonResponse(response);
         if (cancelled || !Array.isArray(data.reviews) || data.reviews.length === 0) return;
 
         setReviews([...data.reviews, ...testimonials]);
@@ -130,7 +146,7 @@ export default function TestimonialSection() {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const data = await readJsonResponse(response);
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to submit review');

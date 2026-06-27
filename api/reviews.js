@@ -31,9 +31,10 @@ function normalizeReview(review) {
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store, max-age=0');
-  const redis = getRedisClient();
 
   try {
+    const redis = getRedisClient();
+
     if (req.method === 'GET') {
       const value = await redis.get(REVIEWS_KEY);
       const reviews = readStoredReviews(value);
@@ -60,6 +61,8 @@ export default async function handler(req, res) {
     res.setHeader('Allow', ['GET', 'POST']);
     return res.status(405).json({ error: 'Method Not Allowed' });
   } catch (error) {
-    return res.status(500).json({ error: 'Reviews endpoint failed' });
+    return res.status(500).json({
+      error: error instanceof Error ? error.message : 'Reviews endpoint failed',
+    });
   }
 }
