@@ -36,6 +36,8 @@ const testimonials = [
   }
 ];
 
+const placeholderReviews = testimonials.slice(0, 4);
+
 const avatarStyle = new Style(definition);
 
 function createAvatarSvg(seed) {
@@ -56,7 +58,7 @@ export default function TestimonialSection() {
   const sectionRef = useRef(null);
   const wrapperRef = useRef(null);
   const progressBarRef = useRef(null);
-  const [reviews, setReviews] = useState(testimonials);
+  const [realReviews, setRealReviews] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
@@ -93,7 +95,7 @@ export default function TestimonialSection() {
         const data = await readJsonResponse(response);
         if (cancelled || !Array.isArray(data.reviews) || data.reviews.length === 0) return;
 
-        setReviews([...data.reviews, ...testimonials]);
+        setRealReviews(data.reviews);
       } catch {
         // Keep local fallback reviews if the API is unavailable.
       }
@@ -106,7 +108,11 @@ export default function TestimonialSection() {
     };
   }, []);
 
-  const renderedReviews = useMemo(() => reviews.map((review, index) => {
+  const renderedReviews = useMemo(() => {
+    const placeholderCount = Math.max(0, 4 - realReviews.length);
+    const combinedReviews = [...realReviews, ...placeholderReviews.slice(0, placeholderCount)];
+
+    return combinedReviews.map((review, index) => {
     const avatarSeed = review.username ?? review.author ?? `review-${index}`;
     const avatarSvg = createAvatarSvg(avatarSeed);
 
@@ -115,7 +121,8 @@ export default function TestimonialSection() {
       avatarSeed,
       avatarSvg,
     };
-  }), [reviews]);
+    });
+  }, [realReviews]);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -153,7 +160,7 @@ export default function TestimonialSection() {
       }
 
       const nextReview = createReviewCard(data.review);
-      setReviews((current) => [nextReview, ...current]);
+      setRealReviews((current) => [nextReview, ...current]);
       closeModal();
     } catch (error) {
       setFormError(error.message || 'Failed to submit review.');
