@@ -41,7 +41,6 @@ const placeholderReviews = testimonials.slice(0, 4);
 const avatarStyle = new Style(definition);
 const REVIEW_MIN_LENGTH = 60;
 const REVIEW_MAX_LENGTH = 200;
-const AI_REVIEW_MAX_LENGTH = 200;
 
 function createAvatarSvg(seed) {
   const avatar = new Avatar(avatarStyle, { seed });
@@ -56,29 +55,6 @@ function normalizeReview(review) {
   };
 }
 
-function formatReviewToRange(reviewText) {
-  const trimmed = reviewText.trim().replace(/\s+/g, ' ');
-
-  if (!trimmed) {
-    return '';
-  }
-
-  if (trimmed.length > AI_REVIEW_MAX_LENGTH) {
-    return trimmed.slice(0, AI_REVIEW_MAX_LENGTH).trimEnd();
-  }
-
-  if (trimmed.length >= REVIEW_MIN_LENGTH) {
-    return trimmed;
-  }
-
-  const fallback = ' This review focuses on clarity, consistency, and practical value.';
-  const combined = `${trimmed}${fallback}`.trim();
-
-  return combined.length > AI_REVIEW_MAX_LENGTH
-    ? combined.slice(0, AI_REVIEW_MAX_LENGTH).trimEnd()
-    : combined;
-}
-
 export default function TestimonialSection() {
   const sectionRef = useRef(null);
   const wrapperRef = useRef(null);
@@ -86,6 +62,7 @@ export default function TestimonialSection() {
   const [realReviews, setRealReviews] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAssisting, setIsAssisting] = useState(false);
   const [formError, setFormError] = useState('');
   const [formData, setFormData] = useState({
     username: '',
@@ -167,12 +144,32 @@ export default function TestimonialSection() {
     }
   };
 
-  const handleReviewAssist = () => {
-    setFormData((current) => ({
-      ...current,
-      review: formatReviewToRange(current.review),
-    }));
+  const handleReviewAssist = async () => {
     setFormError('');
+    setIsAssisting(true);
+
+    try {
+      const response = await fetch('/api/review-assist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await readJsonResponse(response);
+
+      if (!response.ok) {
+        throw new Error(data.error || 'AI assist failed.');
+      }
+
+      setFormData((current) => ({
+        ...current,
+        review: data.review || current.review,
+      }));
+    } catch (error) {
+      setFormError(error.message || 'AI assist failed.');
+    } finally {
+      setIsAssisting(false);
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -395,12 +392,13 @@ export default function TestimonialSection() {
                   <button
                     type="button"
                     onClick={handleReviewAssist}
+                    disabled={isAssisting}
                     className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-xs font-semibold text-black transition-colors hover:bg-gray-100 shadow-sm"
                     aria-label="Improve review with AI assist"
                     title="Improve review with AI assist"
                   >
                     <Sparkle size={14} weight="bold" />
-                    AI assist
+                    {isAssisting ? 'Assisting...' : 'AI assist'}
                   </button>
                 </div>
                 <p className="mt-2 text-xs text-gray-500">
