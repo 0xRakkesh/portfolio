@@ -704,7 +704,7 @@ function App() {
         </div>
       </section>
 
-      <section id="reviews" className="relative z-40 min-h-[40svh] md:min-h-[100svh] bg-white text-black flex items-center">
+      <section id="reviews" className="relative z-40 min-h-[30svh] md:min-h-[85svh] bg-white text-black flex items-center">
         <div className="w-full flex items-center justify-start px-6 md:px-10 py-0">
           <ScrollFloat
             animationDuration={1}
