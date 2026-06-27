@@ -36,9 +36,11 @@ const testimonials = [
   }
 ];
 
-const placeholderReviews = testimonials.slice(0, 4);
+const placeholderReviews = testimonials;
 
 const avatarStyle = new Style(definition);
+const MIN_REVIEW_CARD_COUNT = testimonials.length;
+const DESKTOP_SCROLL_PACE_PER_CARD = 520;
 const REVIEW_MIN_LENGTH = 60;
 const REVIEW_MAX_LENGTH = 200;
 
@@ -60,6 +62,7 @@ export default function TestimonialSection() {
   const wrapperRef = useRef(null);
   const progressBarRef = useRef(null);
   const [realReviews, setRealReviews] = useState([]);
+  const [hasBackendReviews, setHasBackendReviews] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAssisting, setIsAssisting] = useState(false);
@@ -95,9 +98,10 @@ export default function TestimonialSection() {
         if (!response.ok) return;
 
         const data = await readJsonResponse(response);
-        if (cancelled || !Array.isArray(data.reviews) || data.reviews.length === 0) return;
+        if (cancelled || !Array.isArray(data.reviews)) return;
 
         setRealReviews(data.reviews);
+        setHasBackendReviews(data.reviews.length > 0);
       } catch {
         // Keep local fallback reviews if the API is unavailable.
       }
@@ -111,11 +115,9 @@ export default function TestimonialSection() {
   }, []);
 
   const renderedReviews = useMemo(() => {
-    const placeholderCount = Math.max(0, 4 - realReviews.length);
-    const combinedReviews = [
-      ...realReviews.map(normalizeReview),
-      ...placeholderReviews.slice(0, placeholderCount).map(normalizeReview),
-    ];
+    const combinedReviews = hasBackendReviews
+      ? realReviews.map(normalizeReview)
+      : placeholderReviews.slice(0, MIN_REVIEW_CARD_COUNT).map(normalizeReview);
 
     return combinedReviews.map((review, index) => {
       const avatarSeed = review.author || `review-${index}`;
@@ -127,7 +129,7 @@ export default function TestimonialSection() {
         avatarSvg,
       };
     });
-  }, [realReviews]);
+  }, [hasBackendReviews, realReviews]);
 
   const closeModal = useCallback(() => {
     setIsModalOpen(false);
@@ -255,6 +257,7 @@ export default function TestimonialSection() {
 
       const nextReview = normalizeReview(data.review);
       setRealReviews((current) => [nextReview, ...current]);
+      setHasBackendReviews(true);
       closeModal();
     } catch (error) {
       setFormError(error.message || 'Failed to submit review.');
@@ -267,12 +270,18 @@ export default function TestimonialSection() {
     const wrapper = wrapperRef.current;
     if (!wrapper) return;
 
-    // Calculate total scroll distance based on the width of all cards minus viewport width
     const getScrollAmount = () => {
       const wrapperWidth = wrapper.scrollWidth;
       const viewportWidth = window.innerWidth;
-      // Add a little padding to the end so the last card isn't flush against the right edge
-      return -(wrapperWidth - viewportWidth + 40);
+
+      return -Math.max(0, wrapperWidth - viewportWidth + 40);
+    };
+
+    const getScrollDistance = () => {
+      const overflowDistance = Math.abs(getScrollAmount());
+      const dynamicPace = renderedReviews.length * DESKTOP_SCROLL_PACE_PER_CARD;
+
+      return Math.max(overflowDistance, dynamicPace);
     };
 
     const mm = gsap.matchMedia();
@@ -287,7 +296,7 @@ export default function TestimonialSection() {
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
-        end: () => `+=${wrapper.scrollWidth}`,
+        end: () => `+=${getScrollDistance()}`,
         pin: true,
         animation: tween,
         scrub: 1,
@@ -300,18 +309,28 @@ export default function TestimonialSection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top top",
-          end: () => `+=${wrapper.scrollWidth}`,
+          end: () => `+=${getScrollDistance()}`,
           scrub: 1,
         }
       });
     });
 
     mm.add("(max-width: 767px)", () => {
-      // Mobile: Native horizontal scrolling without pin for better mobile UX
-      // No GSAP scroll trigger pinning needed on mobile
-      gsap.to(progressBarRef.current, {
-        width: "33%", // static fallback or we could link to horizontal scroll event
-      });
+      const updateProgress = () => {
+        const maxScrollLeft = wrapper.scrollWidth - wrapper.clientWidth;
+        const progress = maxScrollLeft > 0 ? wrapper.scrollLeft / maxScrollLeft : 1;
+
+        gsap.set(progressBarRef.current, {
+          width: `${Math.max(8, progress * 100)}%`,
+        });
+      };
+
+      updateProgress();
+      wrapper.addEventListener('scroll', updateProgress, { passive: true });
+
+      return () => {
+        wrapper.removeEventListener('scroll', updateProgress);
+      };
     });
 
     const closeOnLeaveTrigger = ScrollTrigger.create({
@@ -326,7 +345,7 @@ export default function TestimonialSection() {
       closeOnLeaveTrigger.kill();
       mm.revert();
     };
-  }, { scope: sectionRef });
+  }, { dependencies: [closeModal, renderedReviews.length], scope: sectionRef, revertOnUpdate: true });
 
   return (
     <section 
