@@ -2,7 +2,7 @@ import { getRedisClient } from './redis.js';
 
 const REVIEWS_KEY = 'portfolio:reviews';
 const REVIEW_MIN_LENGTH = 60;
-const REVIEW_MAX_LENGTH = 180;
+const REVIEW_MAX_LENGTH = 120;
 
 function readStoredReviews(value) {
   if (Array.isArray(value)) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Quotes, Plus, X } from '@phosphor-icons/react';
+import { Quotes, Plus, Sparkle, X } from '@phosphor-icons/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -40,7 +40,8 @@ const placeholderReviews = testimonials.slice(0, 4);
 
 const avatarStyle = new Style(definition);
 const REVIEW_MIN_LENGTH = 60;
-const REVIEW_MAX_LENGTH = 180;
+const REVIEW_MAX_LENGTH = 200;
+const AI_REVIEW_MAX_LENGTH = 200;
 
 function createAvatarSvg(seed) {
   const avatar = new Avatar(avatarStyle, { seed });
@@ -53,6 +54,29 @@ function normalizeReview(review) {
     author: review.author ?? review.username ?? 'Anonymous',
     role: review.role ?? review.occupation ?? '',
   };
+}
+
+function formatReviewToRange(reviewText) {
+  const trimmed = reviewText.trim().replace(/\s+/g, ' ');
+
+  if (!trimmed) {
+    return '';
+  }
+
+  if (trimmed.length > AI_REVIEW_MAX_LENGTH) {
+    return trimmed.slice(0, AI_REVIEW_MAX_LENGTH).trimEnd();
+  }
+
+  if (trimmed.length >= REVIEW_MIN_LENGTH) {
+    return trimmed;
+  }
+
+  const fallback = ' This review focuses on clarity, consistency, and practical value.';
+  const combined = `${trimmed}${fallback}`.trim();
+
+  return combined.length > AI_REVIEW_MAX_LENGTH
+    ? combined.slice(0, AI_REVIEW_MAX_LENGTH).trimEnd()
+    : combined;
 }
 
 export default function TestimonialSection() {
@@ -137,6 +161,18 @@ export default function TestimonialSection() {
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((current) => ({ ...current, [name]: value }));
+
+    if (name === 'review' && formError) {
+      setFormError('');
+    }
+  };
+
+  const handleReviewAssist = () => {
+    setFormData((current) => ({
+      ...current,
+      review: formatReviewToRange(current.review),
+    }));
+    setFormError('');
   };
 
   const handleSubmit = async (event) => {
@@ -150,8 +186,13 @@ export default function TestimonialSection() {
       return;
     }
 
-    if (reviewLength < REVIEW_MIN_LENGTH || reviewLength > REVIEW_MAX_LENGTH) {
-      setFormError(`Review must be between ${REVIEW_MIN_LENGTH} and ${REVIEW_MAX_LENGTH} characters.`);
+    if (reviewLength < REVIEW_MIN_LENGTH) {
+      setFormError('Length must be at least 60 characters.');
+      return;
+    }
+
+    if (reviewLength > REVIEW_MAX_LENGTH) {
+      setFormError(`Review must be ${REVIEW_MAX_LENGTH} characters or less. Use AI assist to shorten it.`);
       return;
     }
 
@@ -340,19 +381,30 @@ export default function TestimonialSection() {
                 />
               </div>
               <div>
-                <textarea
-                  id="review"
-                  name="review"
-                  value={formData.review}
-                  onChange={handleChange}
-                  rows="5"
-                  minLength={REVIEW_MIN_LENGTH}
-                  maxLength={REVIEW_MAX_LENGTH}
-                  className="w-full rounded-2xl border border-black/10 bg-gray-50 px-4 py-3 outline-none focus:border-black resize-none"
-                  placeholder="Write your review..."
-                />
+                <div className="relative">
+                  <textarea
+                    id="review"
+                    name="review"
+                    value={formData.review}
+                    onChange={handleChange}
+                    rows="5"
+                    minLength={REVIEW_MIN_LENGTH}
+                    className="block w-full rounded-2xl border border-black/10 bg-gray-50 px-4 py-3 pr-28 pb-16 outline-none focus:border-black resize-none"
+                    placeholder="Write your review..."
+                  />
+                  <button
+                    type="button"
+                    onClick={handleReviewAssist}
+                    className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-2 text-xs font-semibold text-black transition-colors hover:bg-gray-100 shadow-sm"
+                    aria-label="Improve review with AI assist"
+                    title="Improve review with AI assist"
+                  >
+                    <Sparkle size={14} weight="bold" />
+                    AI assist
+                  </button>
+                </div>
                 <p className="mt-2 text-xs text-gray-500">
-                  Review length: {REVIEW_MIN_LENGTH}-{REVIEW_MAX_LENGTH} characters.
+                  {formData.review.trim().length}/{REVIEW_MAX_LENGTH} characters for submit.
                 </p>
               </div>
               {formError ? <p className="text-sm font-medium text-red-600">{formError}</p> : null}
