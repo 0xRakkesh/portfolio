@@ -17,6 +17,63 @@ function getGeminiText(data) {
   );
 }
 
+function trimToMaxLength(value) {
+  const cleaned = cleanReview(value);
+
+  if (cleaned.length <= REVIEW_MAX_LENGTH) {
+    return cleaned;
+  }
+
+  const sentenceEnd = Math.max(
+    cleaned.lastIndexOf('.', REVIEW_MAX_LENGTH),
+    cleaned.lastIndexOf('!', REVIEW_MAX_LENGTH),
+    cleaned.lastIndexOf('?', REVIEW_MAX_LENGTH)
+  );
+
+  if (sentenceEnd >= REVIEW_MIN_LENGTH) {
+    return cleaned.slice(0, sentenceEnd + 1).trim();
+  }
+
+  const wordEnd = cleaned.lastIndexOf(' ', REVIEW_MAX_LENGTH);
+  const end = wordEnd >= REVIEW_MIN_LENGTH ? wordEnd : REVIEW_MAX_LENGTH;
+
+  return cleaned.slice(0, end).replace(/[,:;.-]+$/g, '').trim();
+}
+
+function expandToMinLength(value, occupation) {
+  let expanded = cleanReview(value);
+  const roleText = occupation ? ` as a ${cleanReview(occupation)}` : '';
+  const additions = [
+    ` Their work shows strong attention to detail${roleText}.`,
+    ' The result feels polished, thoughtful, and easy to trust.',
+    ' I would gladly recommend their work to others.',
+  ];
+
+  for (const addition of additions) {
+    if (expanded.length >= REVIEW_MIN_LENGTH) {
+      break;
+    }
+
+    const next = `${expanded}${addition}`.trim();
+
+    if (next.length <= REVIEW_MAX_LENGTH) {
+      expanded = next;
+    }
+  }
+
+  return trimToMaxLength(expanded);
+}
+
+function fitReviewToRange(value, occupation) {
+  const trimmed = trimToMaxLength(value);
+
+  if (trimmed.length >= REVIEW_MIN_LENGTH) {
+    return trimmed;
+  }
+
+  return expandToMinLength(trimmed, occupation);
+}
+
 async function generateReview(prompt) {
   const apiKey = process.env.GEMINI_API_KEY;
 
@@ -86,15 +143,15 @@ Reviewer occupation: ${occupation || 'Not provided'}
 Draft review: ${draft || 'No draft provided. Generate one concise review.'}
 `;
 
-    let generated = await generateReview(prompt);
+    let generated = fitReviewToRange(await generateReview(prompt), occupation);
 
     if (generated.length > REVIEW_MAX_LENGTH || generated.length < REVIEW_MIN_LENGTH) {
-      generated = await generateReview(`
+      generated = fitReviewToRange(await generateReview(`
 Rewrite this review again so it is a complete sentence between ${REVIEW_MIN_LENGTH} and ${REVIEW_MAX_LENGTH} characters.
 Return only the review text. Do not exceed ${REVIEW_MAX_LENGTH} characters.
 
 Review: ${generated || draft}
-`);
+`), occupation);
     }
 
     if (generated.length > REVIEW_MAX_LENGTH) {
@@ -104,9 +161,7 @@ Review: ${generated || draft}
     }
 
     if (generated.length < REVIEW_MIN_LENGTH) {
-      return res.status(502).json({
-        error: `AI returned a review under ${REVIEW_MIN_LENGTH} characters. Try again.`,
-      });
+      generated = fitReviewToRange(draft, occupation);
     }
 
     return res.status(200).json({ review: generated });
