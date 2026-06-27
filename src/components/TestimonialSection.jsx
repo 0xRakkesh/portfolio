@@ -47,12 +47,11 @@ function createAvatarSvg(seed) {
   return avatar.toString();
 }
 
-function createReviewCard(review) {
+function normalizeReview(review) {
   return {
-    ...review,
-    quote: review.review,
-    author: review.username,
-    role: review.occupation,
+    quote: review.quote ?? review.review ?? '',
+    author: review.author ?? review.username ?? 'Anonymous',
+    role: review.role ?? review.occupation ?? '',
   };
 }
 
@@ -112,17 +111,20 @@ export default function TestimonialSection() {
 
   const renderedReviews = useMemo(() => {
     const placeholderCount = Math.max(0, 4 - realReviews.length);
-    const combinedReviews = [...realReviews, ...placeholderReviews.slice(0, placeholderCount)];
+    const combinedReviews = [
+      ...realReviews.map(normalizeReview),
+      ...placeholderReviews.slice(0, placeholderCount).map(normalizeReview),
+    ];
 
     return combinedReviews.map((review, index) => {
-    const avatarSeed = review.username ?? review.author ?? `review-${index}`;
-    const avatarSvg = createAvatarSvg(avatarSeed);
+      const avatarSeed = review.author || `review-${index}`;
+      const avatarSvg = createAvatarSvg(avatarSeed);
 
-    return {
-      ...review,
-      avatarSeed,
-      avatarSvg,
-    };
+      return {
+        ...review,
+        avatarSeed,
+        avatarSvg,
+      };
     });
   }, [realReviews]);
 
@@ -168,7 +170,7 @@ export default function TestimonialSection() {
         throw new Error(data.error || 'Failed to submit review');
       }
 
-      const nextReview = createReviewCard(data.review);
+      const nextReview = normalizeReview(data.review);
       setRealReviews((current) => [nextReview, ...current]);
       closeModal();
     } catch (error) {
