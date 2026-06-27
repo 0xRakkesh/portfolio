@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Quotes, Plus, Sparkle, X } from '@phosphor-icons/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -129,11 +129,56 @@ export default function TestimonialSection() {
     });
   }, [realReviews]);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setIsModalOpen(false);
     setFormError('');
     setFormData({ username: '', occupation: '', review: '' });
-  };
+  }, []);
+
+  useEffect(() => {
+    if (!isModalOpen || !sectionRef.current) {
+      return undefined;
+    }
+
+    const section = sectionRef.current;
+    let animationFrame = 0;
+
+    const closeIfSectionLeftView = () => {
+      const rect = section.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+      const visibleRatio = Math.max(0, visibleHeight) / Math.min(rect.height, viewportHeight);
+
+      if (visibleRatio < 0.25) {
+        closeModal();
+      }
+    };
+
+    const handleScroll = () => {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(closeIfSectionLeftView);
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry && entry.intersectionRatio < 0.25) {
+          closeModal();
+        }
+      },
+      { threshold: [0, 0.25] }
+    );
+
+    observer.observe(section);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.visualViewport?.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+      window.visualViewport?.removeEventListener('scroll', handleScroll);
+    };
+  }, [closeModal, isModalOpen]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -291,7 +336,7 @@ export default function TestimonialSection() {
       <div className="w-full pl-6 md:pl-10 pb-8">
         <div 
           ref={wrapperRef}
-          className="flex gap-6 flex-nowrap overflow-x-auto md:overflow-visible hide-scrollbar snap-x snap-mandatory w-full md:w-max justify-center md:justify-start px-6 md:px-0"
+          className="flex gap-6 flex-nowrap overflow-x-auto md:overflow-visible hide-scrollbar snap-x snap-mandatory w-full md:w-max justify-start px-6 md:px-0"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {renderedReviews.map((testimonial, i) => (
@@ -342,9 +387,9 @@ export default function TestimonialSection() {
       {isModalOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6 backdrop-blur-sm">
           <div className="w-full max-w-lg rounded-[2rem] bg-white text-black shadow-[0_24px_80px_rgba(0,0,0,0.35)] border border-black/10">
-            <div className="flex items-center justify-between px-6 py-5">
+            <div className="flex items-center justify-between px-6 pt-5 pb-3">
               <div className="flex flex-col gap-1">
-                <h3 className="text-2xl font-extrabold tracking-tight">Submit a review</h3>
+                <h3 className="text-2xl font-extrabold tracking-tight">Submit a Review</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">If you know the profile owner, share your review here.</p>
               </div>
               <button
@@ -356,7 +401,7 @@ export default function TestimonialSection() {
                 <X size={20} weight="bold" />
               </button>
             </div>
-            <form className="space-y-4 px-6 py-6" onSubmit={handleSubmit}>
+            <form className="space-y-4 px-6 pt-3 pb-6" onSubmit={handleSubmit}>
               <div>
                 <input
                   id="username"
@@ -411,7 +456,7 @@ export default function TestimonialSection() {
                   disabled={isSubmitting}
                   className="rounded-full bg-black px-5 py-3 font-semibold text-white disabled:opacity-60"
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit review'}
+                  {isSubmitting ? 'Submitting...' : 'Submit Review'}
                 </button>
               </div>
             </form>
