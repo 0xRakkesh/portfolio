@@ -728,8 +728,8 @@ function App() {
         </div>
       </section>
 
-      <section className="relative z-30 min-h-[40svh] bg-[#120F17] text-white pb-24 md:pb-32 px-6 md:px-10 max-w-[1400px] mx-auto w-full">
-        <div className="flex flex-col">
+      <section className="relative z-30 min-h-[40svh] bg-[#120F17] text-white pb-24 md:pb-32 w-full">
+        <div className="flex flex-col max-w-[1400px] mx-auto px-6 md:px-10 w-full">
           {milestonesItemsForView.map((item, idx) => (
             <div key={idx} className={`event-item pt-12 pb-4 md:pt-16 md:pb-8 flex items-center justify-between gap-3 md:gap-6 ${idx !== 0 ? 'border-t border-white/10' : ''}`}>
               <h3 className="text-[clamp(2.5rem,10vw,4rem)] md:text-[5rem] font-extrabold uppercase tracking-tight text-gray-300 pointer-events-auto select-none leading-none break-words min-w-0 translate-y-[0.1em]">
