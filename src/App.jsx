@@ -57,7 +57,7 @@ const menuItems = [
 
 const socialItems = [
   { label: 'LeetCode', link: 'https://leetcode.com/u/rakeshAdak/' },
-  { label: 'GitHub', link: 'https://github.com/Rakesh-ada' },
+  { label: 'GitHub', link: 'https://github.com/0xRakkesh' },
   { label: 'LinkedIn', link: 'https://www.linkedin.com/in/rakeshadak08/' }
 ];
 
@@ -125,7 +125,7 @@ const projectItems = [
     description:
       'A seamless 1-command IPFS deployment pipeline that automatically builds your project, pins it securely to Pinata, and returns a verifiable CID. The backend Hono API efficiently handles deployment webhooks and status tracking, while an Algorand smart contract registry powers instant, verifiable project lookups directly via the CLI tool or an integrated MCP agent.',
     stack: ['Next.js', 'Hono API', 'IPFS/Pinata', 'Algorand'],
-    link: 'https://github.com/Rakesh-ada/w3deploy',
+    link: 'https://github.com/0xRakkesh/w3deploy',
     color: '#120F17',
     icon: GlobeHemisphereWest,
     media: { type: 'image', url: '/photos/web3deploy.png' }
@@ -136,7 +136,7 @@ const projectItems = [
     description:
       'A robust offline-first inventory management and Point-of-Sale (POS) system built on 4 heavily indexed local SQLite tables, featuring a resilient auto-reconnect sync queue for spotty network conditions. It leverages Google Gemini RAG with a 128-dimensional vector store to power deep AI-driven business insights, and automatically generates comprehensive weekly PDF reports across catalog performance, billing, and sales analytics.',
     stack: ['React Native (Expo)', 'SQLite', 'TypeScript', 'Google Gemini'],
-    link: 'https://github.com/Rakesh-ada/InVo',
+    link: 'https://github.com/0xRakkesh/InVo',
     color: '#120F17',
     icon: Database,
     media: { type: 'video', url: '/videos/invo.mp4' }
@@ -147,7 +147,7 @@ const projectItems = [
     description:
       'An always-on-top, highly optimized Electron desktop assistant featuring a 1-key global summon shortcut and a sophisticated dual AI engine that automatically switches between n8n workflows and Google Gemini based on context. It supports seamless voice I/O powered by Google Speech-to-Text and ElevenLabs, and ships with 5+ pre-configured, importable n8n workflow templates to jumpstart productivity.',
     stack: ['Electron', 'Node.js', 'Google Gemini', 'n8n', 'ElevenLabs'],
-    link: 'https://github.com/Rakesh-ada/Neo',
+    link: 'https://github.com/0xRakkesh/Neo',
     color: '#120F17',
     icon: Robot,
     media: { type: 'image', url: '/photos/Neo.png' }
