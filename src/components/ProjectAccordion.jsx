@@ -77,13 +77,13 @@ export default function ProjectAccordion({ items }) {
                             loop 
                             muted 
                             playsInline 
-                            className="w-full h-auto object-cover max-h-[400px]"
+                            className="w-full h-auto object-contain max-h-[400px]"
                           />
                         ) : (
                           <img 
                             src={item.media.url} 
                             alt={item.title} 
-                            className="w-full h-auto object-cover max-h-[400px]"
+                            className="w-full h-auto object-contain max-h-[400px]"
                           />
                         )}
                       </div>
