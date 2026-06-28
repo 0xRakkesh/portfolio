@@ -662,7 +662,7 @@ function App() {
       </div>
 
       <section ref={skillsSectionRef} id="skills" className="relative z-30 min-h-[34svh] md:h-[56svh] bg-[#120F17] text-white flex items-center">
-        <div ref={skillsMenuRef} className="w-full max-w-[1400px] mx-auto flex items-center justify-start px-6 md:px-10">
+        <div ref={skillsMenuRef} className="w-full flex items-center justify-start px-6 md:px-10">
           <div className="flex w-full items-center justify-between">
             <ScrollFloat
               animationDuration={1}
@@ -690,7 +690,7 @@ function App() {
       </section>
 
       <section id="projects" className="relative z-30 min-h-[50svh] md:min-h-[80svh] bg-white text-black pt-24 md:pt-36">
-        <div className="w-full max-w-[1400px] mx-auto flex items-center justify-start px-6 md:px-10 py-12 md:py-16">
+        <div className="w-full flex items-center justify-start px-6 md:px-10 py-12 md:py-16">
           <ScrollFloat
             animationDuration={1}
             ease="back.inOut(2)"
@@ -710,7 +710,7 @@ function App() {
       </section>
 
       <section ref={winsSectionRef} id="events" className="relative z-30 min-h-[40svh] md:min-h-[100svh] bg-[#120F17] text-white flex items-center">
-        <div className="w-full max-w-[1400px] mx-auto flex items-center justify-start px-6 md:px-10">
+        <div className="w-full flex items-center justify-start px-6 md:px-10">
           <div className="flex w-full items-center justify-between">
             <ScrollFloat
               animationDuration={1}
@@ -729,7 +729,7 @@ function App() {
       </section>
 
       <section className="relative z-30 min-h-[40svh] bg-[#120F17] text-white pb-24 md:pb-32 w-full">
-        <div className="flex flex-col max-w-[1400px] mx-auto px-6 md:px-10 w-full">
+        <div className="flex flex-col px-6 md:px-10 w-full">
           {milestonesItemsForView.map((item, idx) => (
             <div key={idx} className={`event-item pt-12 pb-4 md:pt-16 md:pb-8 flex items-center justify-between gap-3 md:gap-6 ${idx !== 0 ? 'border-t border-white/10' : ''}`}>
               <h3 className="text-[clamp(2.5rem,10vw,4rem)] md:text-[5rem] font-extrabold uppercase tracking-tight text-gray-300 pointer-events-auto select-none leading-none break-words min-w-0 translate-y-[0.1em]">
@@ -750,7 +750,7 @@ function App() {
       </section>
 
       <section id="reviews" className="relative z-40 min-h-[30svh] md:min-h-[85svh] bg-white text-black flex items-center">
-        <div className="w-full max-w-[1400px] mx-auto flex items-center justify-start px-6 md:px-10 py-0">
+        <div className="w-full flex items-center justify-start px-6 md:px-10 py-0">
           <ScrollFloat
             animationDuration={1}
             ease="back.inOut(2)"
