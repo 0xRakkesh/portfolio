@@ -18,7 +18,7 @@ const DefaultCursorSVG = () => {
       height={54}
       viewBox="0 0 50 54"
       fill="none"
-      style={{ transform: "scale(0.5) rotate(-30deg)", transformOrigin: "50% 50%" }}>
+      style={{ transform: "scale(0.5) rotate(-22deg)", transformOrigin: "50% 50%" }}>
       <g filter="url(#filter0_d_91_7928)">
         <path
           d="M42.6817 41.1495L27.5103 6.79925C26.7269 5.02557 24.2082 5.02558 23.3927 6.79925L7.59814 41.1495C6.75833 42.9759 8.52712 44.8902 10.4125 44.1954L24.3757 39.0496C24.8829 38.8627 25.4385 38.8627 25.9422 39.0496L39.8121 44.1954C41.6849 44.8902 43.4884 42.9759 42.6817 41.1495Z"
@@ -314,40 +314,6 @@ export function SmoothCursor({
     return null
   }
 
-  const showArrowCursor = isPointerDown || isClickableHover || isHeroHover
-
-  const glassCursor = (
-    <div
-      style={{
-        width: magnifierSize,
-        height: magnifierSize,
-        borderRadius: 999,
-        border: "1px solid rgba(255, 255, 255, 0.35)",
-        background:
-          "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.06) 48%, rgba(255, 255, 255, 0.02) 70%)",
-        boxShadow:
-          "0 12px 24px rgba(0, 0, 0, 0.35), inset 0 0 16px rgba(255, 255, 255, 0.08)",
-        backdropFilter: "invert(1) saturate(1.15) contrast(1.05)",
-        WebkitBackdropFilter: "invert(1) saturate(1.15) contrast(1.05)",
-        overflow: "hidden",
-        position: "relative",
-      }}
-    >
-      <div
-        ref={magnifierContentRef}
-        style={{
-          position: "fixed",
-          left: 0,
-          top: 0,
-          width: "100vw",
-          height: "100vh",
-          transformOrigin: "top left",
-          pointerEvents: "none",
-        }}
-      />
-    </div>
-  )
-
   return (
     <motion.div
       style={{
@@ -356,8 +322,8 @@ export function SmoothCursor({
         top: cursorY,
         translateX: "-50%",
         translateY: "-50%",
-        rotate: showArrowCursor ? 0 : rotation,
-        scale: showArrowCursor ? 0.9 : scale,
+        rotate: 0,
+        scale: 0.9,
         zIndex: 100,
         pointerEvents: "none",
         willChange: "transform",
@@ -368,7 +334,7 @@ export function SmoothCursor({
       transition={{
         duration: 0.15,
       }}>
-      {showArrowCursor ? <DefaultCursorSVG /> : glassCursor}
+      <DefaultCursorSVG />
     </motion.div>
   );
 }

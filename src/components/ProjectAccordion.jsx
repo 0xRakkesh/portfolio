@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from '@phosphor-icons/react';
 
 export default function ProjectAccordion({ items }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(null);
 
   return (
     <div className="w-full max-w-[1400px] mx-auto px-6 md:px-10 py-12">
@@ -13,9 +13,9 @@ export default function ProjectAccordion({ items }) {
           return (
             <div
               key={item.title}
-              className="border-b border-gray-300 overflow-hidden group pointer-events-auto transition-colors"
-              onMouseEnter={() => setActiveIndex(index)}
-              onFocus={() => setActiveIndex(index)}
+              className="border-b border-gray-300 overflow-hidden group pointer-events-auto transition-colors cursor-pointer"
+              onClick={() => setActiveIndex(activeIndex === index ? null : index)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveIndex(activeIndex === index ? null : index); }}
               tabIndex={0}
             >
               <div className="relative">
@@ -51,7 +51,7 @@ export default function ProjectAccordion({ items }) {
                         </h2>
                       </div>
                       
-                      <p className="text-base md:text-xl text-gray-700 mb-8 max-w-2xl leading-relaxed">
+                      <p className="text-base md:text-lg text-gray-600 mb-8 md:pr-12 lg:pr-16 leading-[1.8] text-justify max-w-2xl">
                         {item.description}
                       </p>
 
@@ -61,19 +61,9 @@ export default function ProjectAccordion({ items }) {
                             href={item.link}
                             target="_blank"
                             rel="noreferrer"
-                            className="px-8 py-2 md:py-3 border-2 border-[#120F17] rounded-full font-bold text-[#120F17] hover:bg-[#120F17] hover:text-white transition-colors uppercase tracking-wider text-sm md:text-base cursor-pointer pointer-events-auto shadow-[4px_4px_0px_transparent] hover:shadow-[4px_4px_0px_#120F17] transition-all"
+                            className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#120F17] text-white rounded-full text-sm font-semibold tracking-wide hover:bg-[#120F17]/80 transition-colors cursor-pointer pointer-events-auto"
                           >
-                            GitHub
-                          </a>
-                        )}
-                        {(item.demoLink || item.link) && (
-                          <a
-                            href={item.demoLink || item.link}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="px-8 py-2 md:py-3 border-2 border-[#120F17] rounded-full font-bold text-[#120F17] hover:bg-[#120F17] hover:text-white transition-colors uppercase tracking-wider text-sm md:text-base cursor-pointer pointer-events-auto shadow-[4px_4px_0px_transparent] hover:shadow-[4px_4px_0px_#120F17] transition-all"
-                          >
-                            View
+                            GITHUB
                           </a>
                         )}
                       </div>

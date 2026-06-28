@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Quotes, Plus, Sparkle, X } from '@phosphor-icons/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -350,7 +351,7 @@ export default function TestimonialSection() {
   return (
     <section 
       ref={sectionRef} 
-      className="relative z-30 bg-white text-black h-[100svh] flex flex-col justify-center overflow-hidden"
+      className="relative z-30 bg-white text-black min-h-[100svh] py-16 flex flex-col justify-center overflow-hidden"
     >
       <div className="w-full pl-6 md:pl-10 pb-8">
         <div 
@@ -403,9 +404,9 @@ export default function TestimonialSection() {
           </div>
         </div>
       </div>
-      {isModalOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6 backdrop-blur-sm">
-          <div className="w-full max-w-lg rounded-[2rem] bg-white text-black shadow-[0_24px_80px_rgba(0,0,0,0.35)] border border-black/10">
+      {isModalOpen && typeof document !== 'undefined' ? createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 px-4 py-6 backdrop-blur-sm">
+          <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-[2rem] bg-white text-black shadow-[0_24px_80px_rgba(0,0,0,0.35)] border border-black/10">
             <div className="flex items-center justify-between px-6 pt-5 pb-3">
               <div className="flex flex-col gap-1">
                 <h3 className="text-2xl font-extrabold tracking-tight">Submit a Review</h3>
@@ -448,7 +449,7 @@ export default function TestimonialSection() {
                     name="review"
                     value={formData.review}
                     onChange={handleChange}
-                    rows="5"
+                    rows="4"
                     minLength={REVIEW_MIN_LENGTH}
                     className="block w-full rounded-2xl border border-black/10 bg-gray-50 px-4 py-3 pb-16 outline-none focus:border-black resize-none"
                     placeholder="Write your review..."
@@ -480,7 +481,7 @@ export default function TestimonialSection() {
               </div>
             </form>
           </div>
-        </div>
+        </div>, document.body
       ) : null}
       <style dangerouslySetInnerHTML={{__html: `
         .hide-scrollbar::-webkit-scrollbar {

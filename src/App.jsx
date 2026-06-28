@@ -10,7 +10,6 @@ import SplitText from './components/SplitText';
 import BorderGlow from './components/BorderGlow';
 import SpotlightCard from './components/SpotlightCard';
 import ScrollFloat from './components/ScrollFloat';
-import FlowingMenu from './components/FlowingMenu';
 import ProjectAccordion from './components/ProjectAccordion';
 import SkillSection from './components/SkillSection';
 import TestimonialSection from './components/TestimonialSection';
@@ -51,9 +50,9 @@ gsap.registerPlugin(ScrollTrigger);
 const menuItems = [
   { label: 'Skills', ariaLabel: 'View skills section', link: '#skills' },
   { label: 'Projects', ariaLabel: 'View projects section', link: '#projects' },
-  { label: 'Winners', ariaLabel: 'View Winners section', link: '#Winners' },
+  { label: 'Events', ariaLabel: 'View Events section', link: '#events' },
   { label: 'Reviews', ariaLabel: 'View Reviews section', link: '#reviews' },
-  { label: 'Reach Out', ariaLabel: 'Reach Out section', link: '#contact' }
+  { label: 'Contact', ariaLabel: 'Contact section', link: '#contact' }
 ];
 
 const socialItems = [
@@ -113,7 +112,7 @@ const projectItems = [
     label: 'Web3 • Android',
     title: 'nanobonds',
     description:
-      '3-contract Solidity system — bond pool, ERC-20 share token, and yield logic — backed by IPFS-hosted metadata. Android client streams real-time APY, maturity, and cashflow data directly from on-chain state.',
+      'A comprehensive 3-contract Solidity system featuring a bond pool, ERC-20 share tokens, and dynamic yield logic, entirely backed by IPFS-hosted metadata for decentralized storage. The native Android client seamlessly streams real-time APY, bond maturity schedules, and cashflow data directly from the on-chain state, providing users with a robust and transparent DeFi tracking experience.',
     stack: ['Web3', 'Solidity', 'Android', 'IPFS'],
     link: 'https://github.com/BikramMondal5/Nano-Bond/tree/main/Android',
     color: '#120F17',
@@ -124,7 +123,7 @@ const projectItems = [
     label: 'Web3 • IPFS',
     title: 'w3deploy',
     description:
-      '1-command IPFS pipeline that builds, pins to Pinata, and returns a verifiable CID. Hono API handles deploy webhooks and status; Algorand registry powers instant project lookup via CLI or MCP agent.',
+      'A seamless 1-command IPFS deployment pipeline that automatically builds your project, pins it securely to Pinata, and returns a verifiable CID. The backend Hono API efficiently handles deployment webhooks and status tracking, while an Algorand smart contract registry powers instant, verifiable project lookups directly via the CLI tool or an integrated MCP agent.',
     stack: ['Next.js', 'Hono API', 'IPFS/Pinata', 'Algorand'],
     link: 'https://github.com/Rakesh-ada/w3deploy',
     color: '#120F17',
@@ -135,7 +134,7 @@ const projectItems = [
     label: 'Offline-first',
     title: 'invo',
     description:
-      'Offline-first inventory and POS on 4 indexed SQLite tables with a reconnect sync queue. Gemini RAG with 128-dim vector store powers AI insights; auto-generates weekly PDF reports across catalog, billing, and analytics.',
+      'A robust offline-first inventory management and Point-of-Sale (POS) system built on 4 heavily indexed local SQLite tables, featuring a resilient auto-reconnect sync queue for spotty network conditions. It leverages Google Gemini RAG with a 128-dimensional vector store to power deep AI-driven business insights, and automatically generates comprehensive weekly PDF reports across catalog performance, billing, and sales analytics.',
     stack: ['React Native (Expo)', 'SQLite', 'TypeScript', 'Google Gemini'],
     link: 'https://github.com/Rakesh-ada/InVo',
     color: '#120F17',
@@ -146,7 +145,7 @@ const projectItems = [
     label: 'Desktop',
     title: 'neo',
     description:
-      'Always-on-top Electron assistant with 1-key global summon and dual AI engine that auto-switches between n8n and Gemini. Voice I/O via Google STT and ElevenLabs; ships 5+ importable n8n workflow templates.',
+      'An always-on-top, highly optimized Electron desktop assistant featuring a 1-key global summon shortcut and a sophisticated dual AI engine that automatically switches between n8n workflows and Google Gemini based on context. It supports seamless voice I/O powered by Google Speech-to-Text and ElevenLabs, and ships with 5+ pre-configured, importable n8n workflow templates to jumpstart productivity.',
     stack: ['Electron', 'Node.js', 'Google Gemini', 'n8n', 'ElevenLabs'],
     link: 'https://github.com/Rakesh-ada/Neo',
     color: '#120F17',
@@ -158,26 +157,29 @@ const projectItems = [
 const MilestonesFlowItems = [
   {
     link: '#',
-    text: 'EIBS 2.0 Finalist',
+    text: 'EIBS 2.0',
     marqueeText: '|EIBS 2.0|✦|FINALIST|✦|IIT KHARAGPUR|✦|',
     images: [
-      '/photos/eibs.jpeg'
+      '/photos/eibs.jpeg',
+      '/photos/iitkgp.jpg'
     ]
   },
   {
     link: '#',
-    text: '2nd Runner Up Vibeathon',
+    text: 'VIBEATHON',
     marqueeText: "|VIBEATHON|✦|2ND RUNNER UP|✦|DAKSHH'26|✦|",
     images: [
-      '/photos/Vibe-A-thon.png'
+      '/photos/Vibe-A-thon.png',
+      '/photos/hitk.jpg'
     ]
   },
   {
     link: '#',
-    text: 'EDUCHAIN S3 GLOBAL Finalist',
+    text: 'EDUCHAIN S3',
     marqueeText: '|EDUCHAIN S3|✦|GLOBAL FINALIST|✦|TOP 120 TEAMS|✦|',
     images: [
-      '/photos/educhain.jpeg'
+      '/photos/educhain.jpeg',
+      '/photos/techno.jpg'
     ]
   }
 ];
@@ -200,6 +202,7 @@ function App() {
   const [resumeViews, setResumeViews] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [formStatus, setFormStatus] = useState({ state: 'idle', message: '' });
 
   useGSAP(
     () => {
@@ -338,27 +341,64 @@ function App() {
     console.log('All letters have animated!');
   };
 
-  const handleContactSubmit = (event) => {
+  const handleContactSubmit = async (event) => {
     event.preventDefault();
+    setFormStatus({ state: 'submitting', message: '' });
 
     const form = event.currentTarget;
     const formData = new FormData(form);
-    const name = String(formData.get('name') || '').trim();
-    const email = String(formData.get('email') || '').trim();
-    const message = String(formData.get('message') || '').trim();
+    const data = Object.fromEntries(formData.entries());
 
-    const subject = `Portfolio Contact from ${name || 'a visitor'}`;
-    const body = [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      '',
-      message || 'Hi Rakesh,'
-    ].join('\n');
-
-    const mailtoUrl = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoUrl;
-    form.reset();
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${contactEmail}`, {
+        method: "POST",
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      
+      if (response.ok) {
+        setFormStatus({ state: 'success', message: 'Message sent successfully!' });
+        form.reset();
+        setTimeout(() => setFormStatus({ state: 'idle', message: '' }), 5000);
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      setFormStatus({ state: 'error', message: 'Failed to send. Please try again.' });
+      setTimeout(() => setFormStatus({ state: 'idle', message: '' }), 5000);
+    }
   };
+
+  useGSAP(() => {
+    const eventItems = gsap.utils.toArray('.event-item');
+    if (!eventItems.length) return;
+
+    // "Skills like animation" uses scroll-scrubbing
+    gsap.set(eventItems, { autoAlpha: 0, y: 50 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: eventItems[0].parentElement,
+        start: 'top 95%',
+        end: 'bottom 85%',
+        scrub: 1
+      }
+    });
+
+    tl.to(eventItems, {
+      autoAlpha: 1,
+      y: 0,
+      duration: 1,
+      stagger: 0.15,
+      ease: 'power2.out'
+    });
+
+    ScrollTrigger.refresh();
+  }, { scope: appRef, dependencies: [isMobile] });
 
   const handleScrollToTop = () => {
     const lenis = typeof window !== 'undefined' ? window.__lenis : null;
@@ -622,7 +662,7 @@ function App() {
       </div>
 
       <section ref={skillsSectionRef} id="skills" className="relative z-30 min-h-[34svh] md:h-[56svh] bg-[#120F17] text-white flex items-center">
-        <div ref={skillsMenuRef} className="w-full flex items-center justify-start px-6 md:px-10">
+        <div ref={skillsMenuRef} className="w-full max-w-[1400px] mx-auto flex items-center justify-start px-6 md:px-10">
           <div className="flex w-full items-center justify-between">
             <ScrollFloat
               animationDuration={1}
@@ -649,8 +689,8 @@ function App() {
         <SkillSection skillsData={newSkillsData} />
       </section>
 
-      <section id="projects" className="relative z-30 min-h-[40svh] md:min-h-[100svh] bg-white text-black">
-        <div className="min-h-[40svh] md:min-h-[100svh] w-full flex items-center justify-start px-6 md:px-10 py-16 md:py-0">
+      <section id="projects" className="relative z-30 min-h-[50svh] md:min-h-[80svh] bg-white text-black pt-24 md:pt-36">
+        <div className="w-full max-w-[1400px] mx-auto flex items-center justify-start px-6 md:px-10 py-12 md:py-16">
           <ScrollFloat
             animationDuration={1}
             ease="back.inOut(2)"
@@ -665,12 +705,12 @@ function App() {
         </div>
       </section>
 
-      <section ref={projectsGridSectionRef} className="relative z-30 w-full bg-white text-black pointer-events-auto">
+      <section ref={projectsGridSectionRef} className="relative z-30 w-full bg-white text-black pointer-events-auto pt-16 md:pt-20 pb-16 md:pb-24">
         <ProjectAccordion items={projectItems} />
       </section>
 
-      <section ref={winsSectionRef} id="Winners" className="relative z-30 min-h-[40svh] md:min-h-[100svh] bg-[#120F17] text-white flex items-center">
-        <div className="w-full flex items-center justify-start px-6 md:px-10">
+      <section ref={winsSectionRef} id="events" className="relative z-30 min-h-[40svh] md:min-h-[100svh] bg-[#120F17] text-white flex items-center">
+        <div className="w-full max-w-[1400px] mx-auto flex items-center justify-start px-6 md:px-10">
           <div className="flex w-full items-center justify-between">
             <ScrollFloat
               animationDuration={1}
@@ -681,31 +721,36 @@ function App() {
               containerClassName="m-0"
               textClassName="text-left text-white uppercase font-extrabold tracking-tight text-[clamp(2.6rem,14vw,6.2rem)] md:text-[clamp(4rem,16vw,14rem)] leading-none whitespace-nowrap"
             >
-              Winners
+              Events
             </ScrollFloat>
             
           </div>
         </div>
       </section>
 
-      <section className="relative z-30 h-[100svh] md:h-screen bg-[#120F17] text-white overflow-hidden">
-        <div className="h-full w-full">
-          <FlowingMenu
-            items={milestonesItemsForView}
-            speed={14}
-            textColor="#ffffff"
-            bgColor="#120F17"
-            marqueeBgColor="#ffffff"
-            marqueeTextColor="#120F17"
-            borderColor="#ffffff"
-            itemHeightClassName="h-[28vh] sm:h-[30vh] md:h-[33vh]"
-            autoItemHeight={isMobile}
-          />
+      <section className="relative z-30 min-h-[40svh] bg-[#120F17] text-white pb-24 md:pb-32 px-6 md:px-10 max-w-[1400px] mx-auto w-full">
+        <div className="flex flex-col">
+          {milestonesItemsForView.map((item, idx) => (
+            <div key={idx} className={`event-item pt-12 pb-4 md:py-12 flex items-center justify-between gap-3 md:gap-6 ${idx !== 0 ? 'border-t border-white/10' : ''}`}>
+              <h3 className="text-[clamp(2.5rem,10vw,4rem)] md:text-[5rem] font-extrabold uppercase tracking-tight text-gray-300 pointer-events-auto select-none leading-none break-words min-w-0">
+                {item.text}
+              </h3>
+              {item.images && item.images.length > 0 && (
+                <div className="hidden md:flex items-center gap-6 shrink-0">
+                  {item.images.map((imgSrc, imgIdx) => (
+                    <div key={imgIdx} className={`w-14 h-14 sm:w-16 sm:h-16 md:w-32 md:h-32 shrink-0 overflow-hidden rounded-full flex items-center justify-center ${imgIdx !== 0 ? 'bg-white' : ''}`}>
+                      <img src={imgSrc} alt={`${item.text} icon ${imgIdx + 1}`} className={`w-full h-full ${imgIdx === 0 ? 'object-contain' : 'object-cover'}`} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </section>
 
       <section id="reviews" className="relative z-40 min-h-[30svh] md:min-h-[85svh] bg-white text-black flex items-center">
-        <div className="w-full flex items-center justify-start px-6 md:px-10 py-0">
+        <div className="w-full max-w-[1400px] mx-auto flex items-center justify-start px-6 md:px-10 py-0">
           <ScrollFloat
             animationDuration={1}
             ease="back.inOut(2)"
@@ -724,9 +769,9 @@ function App() {
 
 
       <section id="contact" className="relative z-30 min-h-[100svh] overflow-hidden bg-[#120F17] text-white flex items-center py-16 md:py-20 lg:py-24">
-        <div className="mx-auto w-full max-w-[1400px] px-6 md:px-10 relative">
+        <div className="mx-auto w-full max-w-[1400px] px-0 md:px-10 relative">
           
-          <div className="bg-[#0B0C10] text-white rounded-[2rem] shadow-[0_24px_80px_rgba(0,0,0,0.5)] p-4 md:p-6 lg:p-8 border border-white/5 w-full">
+          <div className="bg-[#0B0C10] text-white rounded-none md:rounded-[2rem] shadow-[0_24px_80px_rgba(0,0,0,0.5)] px-4 py-10 md:p-6 lg:p-8 border-y md:border border-white/5 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-4">
               
               {/* Left Side: Info */}
@@ -811,13 +856,19 @@ function App() {
                     />
                   </div>
                   
-                  <div className="pt-2">
+                  <div className="pt-2 flex flex-col items-start">
                     <Button
                       type="submit"
-                      className="w-full sm:w-auto px-8 rounded-lg bg-[#0B0C10] text-white font-medium hover:bg-black transition-colors py-6 text-sm shadow-md"
+                      disabled={formStatus.state === 'submitting'}
+                      className="w-full sm:w-auto px-8 rounded-lg bg-[#0B0C10] text-white font-medium hover:bg-black transition-colors py-6 text-sm shadow-md disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                      Submit Inquiry
+                      {formStatus.state === 'submitting' ? 'Sending...' : 'Submit Inquiry'}
                     </Button>
+                    {formStatus.message && (
+                      <p className={`mt-3 text-sm font-medium ${formStatus.state === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                        {formStatus.message}
+                      </p>
+                    )}
                   </div>
                 </form>
               </div>

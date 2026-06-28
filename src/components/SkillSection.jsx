@@ -63,10 +63,14 @@ export default function SkillSection({ skillsData }) {
               {category.items.map((item, itemIdx) => (
                 <div 
                   key={itemIdx} 
-                  className="skill-item flex items-center gap-3 bg-white/5 border border-white/10 hover:border-white/30 hover:bg-white/10 transition-all rounded-xl px-5 py-3 shadow-lg"
+                  className="skill-item flex items-center gap-2 md:gap-3 bg-white/5 border border-white/10 hover:border-white/30 hover:bg-white/10 transition-all rounded-lg md:rounded-xl px-3 py-2 md:px-5 md:py-3 shadow-lg"
                 >
-                  {item.icon && React.createElement(item.icon, { size: 28, weight: "regular", color: item.color || "#ffffff" })}
-                  <span className="text-base md:text-xl font-medium tracking-wide whitespace-nowrap">
+                  {item.icon && (
+                    <div className="w-5 h-5 md:w-7 md:h-7 flex items-center justify-center shrink-0">
+                      {React.createElement(item.icon, { size: "100%", weight: "regular", color: item.color || "#ffffff" })}
+                    </div>
+                  )}
+                  <span className="text-sm md:text-xl font-medium tracking-wide whitespace-nowrap">
                     {item.name}
                   </span>
                 </div>
