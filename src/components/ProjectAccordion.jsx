@@ -69,7 +69,7 @@ export default function ProjectAccordion({ items }) {
                       </div>
                     </div>
                     {item.media && (
-                      <div className="w-full md:w-1/2 flex items-center justify-center rounded-2xl overflow-hidden bg-gray-100 shadow-md">
+                      <div className="w-full md:w-1/2 flex items-center justify-center rounded-2xl overflow-hidden bg-white shadow-md">
                         {item.media.type === 'video' ? (
                           <video 
                             src={item.media.url} 
