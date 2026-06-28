@@ -47,7 +47,7 @@ export default function SkillSection({ skillsData }) {
   }, { scope: containerRef });
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-[1400px] mx-auto px-6 md:px-10 py-16 md:py-24 text-white">
+    <div ref={containerRef} className="relative w-full px-6 md:px-10 py-16 md:py-24 text-white">
       <div className="flex flex-col gap-16 md:gap-24">
         {skillsData.map((category, idx) => (
           <div key={idx} className="skill-category flex flex-col md:flex-row md:items-center gap-8 md:gap-16">

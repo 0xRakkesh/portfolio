@@ -6,7 +6,7 @@ export default function ProjectAccordion({ items }) {
   const [activeIndex, setActiveIndex] = useState(null);
 
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-6 md:px-10 py-12">
+    <div className="w-full px-6 md:px-10 py-12">
       <div className="flex flex-col border-t border-gray-300">
         {items.map((item, index) => {
           const isActive = activeIndex === index;
