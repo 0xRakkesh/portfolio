@@ -471,6 +471,25 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const criticalAssets = ['/profile.png', '/icons/Abstract Shape.png'];
+    criticalAssets.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
+  useEffect(() => {
+    const preloadAssets = ['/profile.png', '/icons/Abstract Shape.png'];
+    preloadAssets.forEach(src => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      document.head.appendChild(link);
+    });
+  }, []);
+
+  useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 767px)');
     const updateMobileState = () => setIsMobile(mediaQuery.matches);
     updateMobileState();
